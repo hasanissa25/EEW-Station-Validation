@@ -1,0 +1,73 @@
+{
+    "availability": [
+        {
+            "id": "QW.QCC02.HNE",
+            "intervals": [
+                {
+                    "startTime": "2022-04-03T00:00:00.000000000Z",
+                    "endTime": "2022-04-03T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 35,
+                    "latency": {
+                        "minimum": 1.5,
+                        "average": 2,
+                        "maximum": 3.5
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 4,
+                        "retxPercent": 0.0
+                    }
+                }
+            ],
+            "overallPercent": ">99"
+        },
+        {
+            "id": "QW.QCC02.HNN",
+            "intervals": [
+                {
+                    "startTime": "2022-04-03T00:00:00.000000000Z",
+                    "endTime": "2022-04-03T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 60,
+                    "latency": {
+                        "minimum": 2,
+                        "average": 3,
+                        "maximum": 6
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 4,
+                        "retxPercent": 0.0
+                    }
+                }
+            ],
+            "overallPercent": ">99"
+        },
+        {
+            "id": "QW.QCC02.HNZ",
+            "intervals": [
+                {
+                    "startTime": "2022-04-03T00:00:00.000000000Z",
+                    "endTime": "2022-04-03T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 5,
+                    "latency": {
+                        "minimum": 2.6,
+                        "average": 3,
+                        "maximum": 4.5
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 5,
+                        "retxPercent": 0.0
+                    }
+                }
+            ],
+            "overallPercent": ">99"
+        }
+    ]
+}

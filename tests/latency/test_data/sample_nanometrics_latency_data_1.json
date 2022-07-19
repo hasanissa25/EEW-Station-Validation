@@ -1,0 +1,141 @@
+{
+    "availability": [
+        {
+            "id": "QW.QCC02.HNE",
+            "intervals": [
+                {
+                    "startTime": "2022-04-01T00:00:00.000000000Z",
+                    "endTime": "2022-04-01T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 35,
+                    "latency": {
+                        "minimum": 1.5,
+                        "average": 1.5,
+                        "maximum": 1.5
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 1,
+                        "retxPercent": 0.0
+                    }
+                },
+                {
+                    "startTime": "2022-04-01T00:00:01.000000000Z",
+                    "endTime": "2022-04-01T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 20,
+                    "latency": {
+                        "minimum": 2,
+                        "average": 2.5,
+                        "maximum": 3
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 2,
+                        "retxPercent": 0.0
+                    }
+                },
+                {
+                    "startTime": "2022-04-01T00:00:02.000000000Z",
+                    "endTime": "2022-04-01T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 9,
+                    "latency": {
+                        "minimum": 1.5,
+                        "average": 2,
+                        "maximum": 3
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 3,
+                        "retxPercent": 0.0
+                    }
+                }
+            ],
+            "overallPercent": ">99"
+        },
+        {
+            "id": "QW.QCC02.HNN",
+            "intervals": [
+                {
+                    "startTime": "2022-04-01T00:00:00.000000000Z",
+                    "endTime": "2022-04-01T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 60,
+                    "latency": {
+                        "minimum": 7,
+                        "average": 7,
+                        "maximum": 7
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 1,
+                        "retxPercent": 0.0
+                    }
+                },
+                {
+                    "startTime": "2022-04-01T00:00:01.000000000Z",
+                    "endTime": "2022-04-01T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 10,
+                    "latency": {
+                        "minimum": 2,
+                        "average": 2.75,
+                        "maximum": 3.5
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 2,
+                        "retxPercent": 0.0
+                    }
+                }
+            ],
+            "overallPercent": ">99"
+        },
+        {
+            "id": "QW.QCC02.HNZ",
+            "intervals": [
+                {
+                    "startTime": "2022-04-01T00:00:00.000000000Z",
+                    "endTime": "2022-04-01T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 5,
+                    "latency": {
+                        "minimum": 2.6,
+                        "average": 2.6,
+                        "maximum": 2.6
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 1,
+                        "retxPercent": 0.0
+                    }
+                },
+                {
+                    "startTime": "2022-04-01T00:00:01.000000000Z",
+                    "endTime": "2022-04-01T00:00:00.999999989Z",
+                    "actualNanosecondsAvailable": 359999989,
+                    "expectedNanosecondsAvailable": 999999989,
+                    "percentAvailability": 35,
+                    "latency": {
+                        "minimum": 2,
+                        "average": 2.5,
+                        "maximum": 3
+                    },
+                    "retx": {
+                        "retxPackets": 0,
+                        "allPackets": 2,
+                        "retxPercent": 0.0
+                    }
+                }
+            ],
+            "overallPercent": ">99"
+        }
+    ]
+}

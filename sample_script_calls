@@ -1,0 +1,50 @@
+Activate the virtual environment: 
+    source venv/bin/activate
+
+Parameters:
+
+-T: Type of instrument, Example: APOLLO or GURALP
+-N: The network code, Example: QW
+-S: The station code, Example: QCC01
+-L: The location code, Example: 00
+-d: Start date, YYYY-M-D; Example: 2022-3-9
+-e: End date, EXCLUSIVE YYYY-M-D; for a one day validation period, the end date should be startdate + 1. Example: 2022-3-15
+-s: Station xml location, Example: '/home/ec2-user/station-validation/stationverification/data/QW.xml'
+-m: Miniseed files archive location, Example: '/apollo/archive/miniseed/'
+-l: Latency files arhcive location, Example: '/apollo/archive/latency'
+-i: ISPAQ executable location, Example: '/home/ec2-user/ispaq/run_ispaq.py'
+-H: State of health files arhcive location, Example: '/apollo/archive/soh/'
+-U: Whether or not to upload results to S3 bucket, Example: True or False
+-c: Station configuration file, if no stationXML is available, Example: /home/ec2-user/station-validation/tests/data
+
+Sample Calls:
+
+stationverification script:
+    time nohup stationverification -T APOLLO -N QW -S BCL01 -L 00 -d 2022-6-25 -e 2022-7-05  >> logs/BCL01_log.out &
+
+latency script:
+    time nohup stationverificationlatency -T APOLLO -N QW -S BCL25 -d 2022-6-15 -e 2022-6-26  >> logs/BCL25-Latency_log &
+
+stationverification script with stationXML, and overwritting default archive directories:
+    time nohup stationverification -T APOLLO -N QW -S QCC01 -L 00 -d 2022-4-21 -e 2022-5-1 -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -s /home/ec2-user/station-validation/stationverification/data/QW.xml -o /validation >> logs/QCC01_log.out &
+
+stationverification script with station config file, and overwritting default archive directories:
+    time nohup stationverification -T APOLLO -N QW -S QCC02 -L 00 -d 2022-3-28 -e 2022-3-29 -c /home/ec2-user/station-validation/tests/data/stationQCC02.conf -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -o /validation >> logs/QCC02_log.out &
+
+latency script, and overwritting default archive directories:
+    time nohup stationverificationlatency -T APOLLO -N QW -S BCL25 -d 2022-4-21 -e 2022-4-22 -l /apollo/archive/latency -o /validation >> logs/BCL25_log.out &
+
+
+
+
+Run upload_report_to_gitlab script (Within CHIS Network):
+-t: Title of the wiki page
+-w: The link to the webserver containing the documents to download.  
+    
+    uploadreport -t "QW QCC09 2022-06-16 To 2022-06-26" -w "https://3.96.234.48:18010/json/QW/QCC09/2022-06-16-2022-06-26/"
+
+Run fetch_station_xml script (Within CHIS Network):
+-n: The network code.
+-s: The start date of the station. If left empty, all starting dates will be queried 
+    
+    fetchStationXml -n QW -s 2018-1-1

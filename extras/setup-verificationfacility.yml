@@ -1,0 +1,54 @@
+---
+- hosts: verificationfacility
+  become: true
+  tasks:
+  - name: install required packages
+    yum: name={{item}} state=present
+    with_items:
+      - epel-release
+      - python3
+      - python3-pip
+      - git
+      - python3-devel
+      - libcurl-devel
+      - libxml2-devel
+
+  - name: Install required packages for R using dnf (centos8 only)
+    dnf: enablerepo=powertools name={{item}} state=present
+    with_items:
+      - openblas-devel
+      - texinfo-tex
+
+  - name: install R
+    yum: name=R state=present
+
+  - name: install numpy
+    pip: executable=pip3 name=numpy==1.19.5 state=present
+
+  - name: install the rest of the python dependancies
+    pip: executable=pip3 name={{item}} state=present
+    with_items:
+      - pandas==0.25.3
+      - obspy==1.2.2
+      - rpy2==3.1.0
+    
+  - name: Create ispaq directory
+    file: path=/etc/ispaq state=directory
+
+  - name: Clone custom ispaq repo
+    git: repo=http://bitbucket.seismo.nrcan.gc.ca/scm/~jgosset/ispaq.git dest=/etc/ispaq
+    
+  - name: Install ispaq as package
+    pip: executable=pip3 name=/etc/ispaq state=present
+
+  - name: Run ispaq once to install R packages
+    command: /etc/ispaq/run_ispaq.py
+
+  - name: Create stationverification directory
+    file: path=/etc/stationverification state=directory
+  
+  - name: Clone stationverification repo
+    git: repo=http://bitbucket.seismo.nrcan.gc.ca/scm/~jgosset/station-validation.git dest=/etc/stationverification
+  
+  - name: Install stationverification as package
+    pip: executable=pip3 name=/etc/stationverification state=present

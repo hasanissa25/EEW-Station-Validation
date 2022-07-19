@@ -1,0 +1,31 @@
+[run]
+omit =
+        *stationverification/_version.py*
+        *stationverification/nagios/**
+        *stationverification/config.py*
+
+        *stationverification/bin/pushtonagios.py*
+        *stationverification/bin/dailyverification.py*
+        *stationverification/bin/stationverification.py*
+        *stationverification/bin/stationverification_latency.py*
+        *stationverification/bin/stationverification_CN.py*
+        *stationverification/bin/upload_report_to_gitlab.py*
+
+        *stationverification/utilities/GitLabAttachments.py*
+        *stationverification/utilities/GitLabWikis.py*
+
+        *stationverification/utilities/nagiosinterface.py*
+        *stationverification/utilities/prepare_ispaq.py*
+        *stationverification/utilities/handle_running_ispaq_command.py*
+        
+        *stationverification/utilities/upload_results_to_s3.py*
+        *stationverification/utilities/plot_clock_offset.py*
+        *stationverification/utilities/plot_timing_quality.py*
+        *stationverification/utilities/change_name_of_ISPAQ_PDFs_files.py*
+        *stationverification/utilities/cleanup_directory.py*
+        *stationverification/utilities/fetch_arguments.py*
+        *stationverification/utilities/fetch_arguments_CN.py*
+        *stationverification/utilities/generate_markdown_template.py*
+        *stationverification/utilities/handle_running_ispaq_command_CN.py*
+        *stationverification/utilities/sohmetrics.py*
+        *stationverification/utilities/upload_report_fetch_arguments.py*

@@ -1,0 +1,70 @@
+# Ignore python compiled
+*pyc
+
+# Ignore setup.py build information
+*egg-info
+dist/*
+build/*
+
+# Ignore pytest caching
+.pytest_cach
+__pycache__
+
+# Ignore visual studio code
+.vscode
+stationValidation.code-workspace
+
+# Ignore ispaq generated files
+*/csv/*
+*/PDFs/*
+*/PSDs/*
+csv/*
+PDFs/*
+PSDs/*
+*ISPAQ_TRANSCRIPT.log
+*.json
+*.png
+*.csv
+*.out
+
+# Ignore experimental files
+depricated/*
+experimental/*
+
+# Ignore test data
+latency/*
+
+
+# Ignore any loose log files
+*.log
+
+# Ignore .tgz files
+*.tgz
+
+# ignore results and data
+stationvalidation_output/*
+station_validation_results/*
+station_validation_latency_results/*
+
+hasan/*
+distribution/*
+
+tests/data/*
+backupData/* 
+# !tests/data/ispaq_outputs
+# tests/data/apollo/* 
+# !tests/data/apollo/archive
+# tests/data/apollo/archive/* 
+# !tests/data/apollo/archive/soh
+# tests/data/apollo/archive/soh/* 
+# !tests/data/apollo/archive/soh/2022
+# tests/data/apollo/archive/soh/2022/* 
+# !tests/data/apollo/archive/soh/2022/04
+# tests/data/apollo/archive/soh/2022/04/* 
+# !tests/data/apollo/archive/soh/2022/04/01
+
+tests/generate_ratio_plot/data/*
+tests/run_ispaq/preffile
+stationverification/data/resp_files/*
+stationverification/data/stationXML.dataless
+stationverification/data/QW.xml

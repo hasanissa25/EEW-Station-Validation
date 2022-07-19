@@ -1,0 +1,190 @@
+{
+  "network_code": "QW",
+  "station_code": "QCC02",
+  "start_date": "2022-04-01",
+  "end_date": "2022-04-02",
+  "channels": {
+    "HNZ": {
+      "metrics": {
+        "max_gap": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "num_gaps": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "percent_availability": {
+          "passed": true,
+          "details": [],
+          "values": [
+            100.0
+          ]
+        },
+        "num_overlaps": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "spikes": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "calibration_signal": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "max_overlap": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        }
+      },
+      "latency": {
+        "average_latency": 2.01,
+        "timely_availability": 98.71,
+        "total_latencies": 86400,
+        "failed_latencies": 1118
+      }
+    },
+    "HNN": {
+      "metrics": {
+        "max_gap": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "num_gaps": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "percent_availability": {
+          "passed": true,
+          "details": [],
+          "values": [
+            100.0
+          ]
+        },
+        "num_overlaps": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "spikes": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "calibration_signal": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "max_overlap": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        }
+      },
+      "latency": {
+        "average_latency": 2.01,
+        "timely_availability": 99.11,
+        "total_latencies": 86400,
+        "failed_latencies": 773
+      }
+    },
+    "HNE": {
+      "metrics": {
+        "max_gap": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "num_gaps": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "percent_availability": {
+          "passed": true,
+          "details": [],
+          "values": [
+            100.0
+          ]
+        },
+        "num_overlaps": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "spikes": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "calibration_signal": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        },
+        "max_overlap": {
+          "passed": true,
+          "details": [],
+          "values": [
+            0.0
+          ]
+        }
+      },
+      "latency": {
+        "average_latency": 1.99,
+        "timely_availability": 98.96,
+        "total_latencies": 86400,
+        "failed_latencies": 899
+      }
+    }
+  },
+  "station_latency": {
+    "average_latency": 2.0,
+    "timely_availability": 98.92,
+    "timely_passed": true
+  }
+}

@@ -1,0 +1,2 @@
+include versioneer.py
+include stationverification/_version.py
