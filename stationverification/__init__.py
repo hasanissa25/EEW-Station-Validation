@@ -3,6 +3,8 @@ from . import _version
 
 ISPAQ_PREF = str(Path(__file__).parent.joinpath(
     'data', 'eew_preferences.txt'))
+ISPAQ_PREF_CN = str(Path(__file__).parent.joinpath(
+    'data', 'eew_preferences_CN.txt'))
 CONFIG = str(Path(__file__).parent.joinpath(
     'data', 'config.ini'))
 XML_CONVERTER = str(Path(__file__).parent.joinpath(

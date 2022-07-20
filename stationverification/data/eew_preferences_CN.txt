@@ -1,0 +1,65 @@
+# ISPAQ PREFERENCE FILE
+ See end of file for detailed descriptions of this file format, including list of all current metric names
+
+# User defined sets of metrics ------------------------------------------------
+Metrics:
+  # Default combinations
+  basicStats: sample_min, sample_median, sample_mean, sample_max, sample_rms, sample_unique,max_range
+  gaps: num_gaps, max_gap, num_overlaps, max_overlap, percent_availability
+  psdPdf: psd_corrected, pdf, pct_above_nhnm, pct_below_nlnm, dead_channel_lin, dead_channel_gsn
+  psdDerived: sample_min, sample_median, sample_mean, sample_max, sample_rms, sample_unique,max_range, pct_above_nhnm, pct_below_nlnm, dead_channel_lin, dead_channel_gsn
+  stateOfHealth: calibration_signal, timing_correction, event_begin, event_end, event_in_progress, clock_locked, amplifier_saturation, digitizer_clipping, spikes, glitches, missing_padded_data, telemetry_sync_error, digital_filter_charging, suspect_time_tag, timing_quality
+  stalta: max_stalta
+  numSpikes: num_spikes
+  snr: sample_snr
+  crossTalk: cross_talk
+  pressureCorrelation: pressure_effects
+  crossCorrelation: polarity_check
+  orientationCheck: orientation_check
+  transferFunction: transfer_function
+  sampleRates: sample_rate_channel, sample_rate_resp
+  
+  eew_test: calibration_signal, max_gap, num_gaps, max_overlap, num_overlaps, spikes, percent_availability, sample_min, sample_max, sample_mean, sample_median, sample_rms, psd_corrected, pdf, pct_above_nhnm, pct_below_nlnm, dead_channel_lin, dead_channel_gsn
+  eew_no_psd: calibration_signal, max_gap, num_gaps, max_overlap, num_overlaps, spikes, percent_availability, sample_min, sample_max, sample_mean, sample_median, sample_rms
+  eew_only_psd: sample_min, sample_median, sample_mean, sample_max, sample_rms, sample_unique,max_range, pct_above_nhnm, pct_below_nlnm, dead_channel_lin, dead_channel_gsn, psd_corrected, pdf
+
+# Sets of SNCLs ---------------------------------------------------------------
+SNCLs:
+  
+  all: *.*.*.H??
+
+  # Examples for testing default combinations of metrics
+  basicStats: IU.ANMO.00.BHZ, IU.GUMO.00.BH?
+  psdPdf: IU.GRFO..BHZ
+  ANMO: IU.ANMO.00.BH?
+  IU: IU.*.10.BHZ, IU.*.10.HHZ
+  
+
+# Data and Metadata source ----------------------------------------------------
+Data_Access:
+
+  dataselect_url:        #one of: ObsPy FDSN service name, IRISPH5, url pointing to FDSN web service, or local data directory
+  station_url:        #one of: ObsPy FDSN service name, IRISPH5, url pointing to FDSN web service, or path to local StationXML file      
+  event_url:         #one of: ObsPy FDSN service name, url pointing to FDSN web service, or path to local QUAKEML file
+  resp_dir:      #directory containing local response RESP files, if used.
+ 
+
+# User defined preferences ----------------------------------------------------
+Preferences:
+
+  output: csv                   # whether to write metrics to a csv file or a sqlite database. options: csv, db
+  db_name: ispaq.db        # if writing to a database (output=db), the name of the database
+  csv_dir: ./ispaq_outputs/csv/        # directory to contain generated metrics .csv files
+  psd_dir: ./ispaq_outputs/PSDs/        # directory to find PSD csv files (will have subdirectories based on network and station code)
+  pdf_dir: ./ispaq_outputs/PDFs/        # directory to contain PDF files (will have subdirectories based on network and station code)
+  sigfigs: 6            # significant figures used to output metric values
+  sncl_format: N.S.L.C      # format of sncl aliases and miniSEED file names, must be some combination of period separated
+                                N=network,S=station, L=location, C=channel (e.g., N.S.L.C or S.N.L.C)
+
+
+# PDF-specific preferences ----------------------------------------------------
+PDF_Preferences:
+
+  pdf_type: text, plot            # formats for the aggregated PDF: plot, text
+  pdf_interval: daily, aggregated    # whether the pdfs should be calculated daily or over the entire span: daily, aggregated
+  plot_include: legend, colorbar     # options to include: legend (for min/max/mode), colorbar, fixed_yaxis_limits, none

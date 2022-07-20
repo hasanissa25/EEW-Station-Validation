@@ -191,7 +191,7 @@ span',
 
     # Config files
     pfile = args.preference_file if args.preference_file is not None\
-        else default_parameters.PREFERENCE_FILE
+        else default_parameters.PREFERENCE_FILE_CN
     thresholds = ConfigParser()
     if args.thresholds is not None:
         thresholds.read(args.thresholds)

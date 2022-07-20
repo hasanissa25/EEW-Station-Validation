@@ -2,7 +2,7 @@
 from functools import lru_cache
 from typing import Any
 from pydantic import BaseSettings
-from stationverification import CONFIG, ISPAQ_PREF
+from stationverification import CONFIG, ISPAQ_PREF, ISPAQ_PREF_CN
 
 
 class BaseAppSettings(BaseSettings):
@@ -30,6 +30,7 @@ class BaseAppSettings(BaseSettings):
     STATION_URL: str = "stationverification/data/QW.xml"
 
     PREFERENCE_FILE: str = ISPAQ_PREF
+    PREFERENCE_FILE_CN: str = ISPAQ_PREF_CN
     THRESHOLDS: str = CONFIG
 
     # GitLab
