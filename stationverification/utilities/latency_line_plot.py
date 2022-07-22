@@ -113,7 +113,7 @@ def latency_line_plot(
             axes[0].axhline(threshold, color='r', linewidth="1",
                             linestyle='--',
                             label=f"Data Timeliness threshold: \
-    {timely_threshold} seconds")
+{timely_threshold} seconds")
 
             legend = axes[0].legend(bbox_to_anchor=(1, 1),
                                     loc='upper right', fontsize="9")
@@ -148,7 +148,7 @@ def latency_line_plot(
             axes[1].axhline(threshold, color='r', linewidth="1",
                             linestyle='--',
                             label=f"Data Timeliness threshold: \
-    {timely_threshold} seconds")
+{timely_threshold} seconds")
 
             legend = axes[1].legend(bbox_to_anchor=(1, 1),
                                     loc='upper right', fontsize="9")
@@ -182,7 +182,7 @@ def latency_line_plot(
             axes[2].axhline(threshold, color='r', linewidth="1",
                             linestyle='--',
                             label=f"Data Timeliness threshold: \
-    {timely_threshold} seconds")
+{timely_threshold} seconds")
 
             legend = axes[2].legend(bbox_to_anchor=(1, 1),
                                     loc='upper right', fontsize="9")

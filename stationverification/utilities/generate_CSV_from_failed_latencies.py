@@ -45,3 +45,6 @@ def generate_CSV_from_failed_latencies(latencies: DataFrame,
     latencies_above_three_rounded.to_csv(
         f'./stationvalidation_output/{filename}.failed_latencies.csv',
         index=False)
+    latencies.to_csv(
+        f'./stationvalidation_output/{filename}.all_latencies.csv',
+        index=False)
