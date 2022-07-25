@@ -8,6 +8,8 @@ from pandas.core.frame import DataFrame
 
 from stationverification.utilities import exceptions
 
+# flake8: noqa
+
 
 def get_latencies_from_apollo(files: list,
                               network: str,
@@ -74,9 +76,18 @@ def get_latencies_from_apollo(files: list,
         array_of_daily_latency_objects_all_latencies.append(
             current_day_all_latencies)
     logging.info("Creating Latency Dataframe...")
+    logging.info("Creating JSON...")
+    json_dump = json.dumps(combined_latency_data_for_all_days)
+    with open('all_days_dataframe_as_json.json', 'w') as outfile:
+        outfile.write(json_dump)
+    logging.info("Finished creating JSON...")
+
+    # combined_latency_dataframe_for_all_days_dataframe = pd.DataFrame(
+    #     data=combined_latency_data_for_all_days, index=columns).T
     combined_latency_dataframe_for_all_days_dataframe = pd.DataFrame(
-        data=combined_latency_data_for_all_days, index=columns).T
-    logging.info("Finished creating latency dataframe")
+        data=[], index=columns).T
+    # logging.info("Finished creating latency dataframe")
+
     return combined_latency_dataframe_for_all_days_dataframe, \
         array_of_daily_latency_objects_max_latency_only,\
         array_of_daily_latency_objects_all_latencies
@@ -227,8 +238,7 @@ def get_latency_value_for_current_timestamp(current_latency: dict,
                 packet_id="min")
 
         if current_latency["latency"]["average"] != -1:
-            number_of_times_to_append_to_latencies = \
-                current_latency["retx"]["allPackets"] - 2
+            number_of_times_to_append_to_latencies = current_latency["retx"]["allPackets"] - 2
             for iteration in range(number_of_times_to_append_to_latencies):
                 append_to_latency_objects(
                     append_to_current_day_max_latencies=False,
@@ -291,14 +301,13 @@ def append_to_latency_objects(
                                   "."+current_channel +
                                   "." +
                                   start_time +
-                                  "." + packet_id] = \
-            {'network': current_network,
-                'station': current_station,
-                'channel': current_channel,
-                'startTime': start_time,
-                'data_latency':
-                current_latency
-             }
+                                  "." + packet_id] = {'network': current_network,
+                                                      'station': current_station,
+                                                      'channel': current_channel,
+                                                      'startTime': start_time,
+                                                      'data_latency':
+                                                      current_latency
+                                                      }
     if append_to_current_day_max_latencies is True:
         # An array of dataframes, for each day in the validation period. \
         # Only includes the max latency values, used in the latency line plot
@@ -307,11 +316,10 @@ def append_to_latency_objects(
                                   "."+current_channel +
                                   "." +
                                   start_time +
-                                  "." + packet_id] = \
-            {'network': current_network,
-             'station': current_station,
-             'channel': current_channel,
-             'startTime': start_time,
-             'data_latency':
-             current_latency
-             }
+                                  "." + packet_id] = {'network': current_network,
+                                                      'station': current_station,
+                                                      'channel': current_channel,
+                                                      'startTime': start_time,
+                                                      'data_latency':
+                                                      current_latency
+                                                      }

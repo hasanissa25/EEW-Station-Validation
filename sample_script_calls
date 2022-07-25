@@ -23,7 +23,7 @@ stationverification script:
     time nohup stationverification -T APOLLO -N QW -S BCV09 -L 00 -d 2022-7-23 -e 2022-7-24  >> logs/BCV09_log.out &
 
 latency script:
-    time nohup stationverificationlatency -T APOLLO -N QW -S BCL25 -d 2022-6-15 -e 2022-6-26  >> logs/BCL25-Latency_log &
+    time nohup stationverificationlatency -T APOLLO -N QW -S BCL01 -d 2022-6-25 -e 2022-7-5  >> logs/BCL01-Latency_log &
 
 stationverification script with stationXML, and overwritting default archive directories:
     time nohup stationverification -T APOLLO -N QW -S QCC01 -L 00 -d 2022-4-21 -e 2022-5-1 -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -s /home/ec2-user/station-validation/stationverification/data/QW.xml -o /validation >> logs/QCC01_log.out &
