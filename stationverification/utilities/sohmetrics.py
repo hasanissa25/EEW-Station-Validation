@@ -76,8 +76,10 @@ def getsohfiles(
     iterdate = startdate
     if location is None:
         snlc = f'{network}.{station}.*.{channel}'
+        logging.info(f'getsohfiles> Location is none: snlc: {snlc}')
     else:
         snlc = f'{network}.{station}.{location}.{channel}'
+        logging.info(f'getsohfiles> With Location: snlc: {snlc}')
     snlc = f'{network}.{station}..{channel}'
     # Loop through all the dates
     while iterdate < enddate:
