@@ -14,11 +14,11 @@ def test_add_soh_results_to_report():
     thresholds_test = ConfigParser()
     thresholds_test.read(CONFIG)
     add_soh_results_to_report(network="QW",
-                              station="QCC02",
+                              station="BCV13",
                               location=None,
-                              startdate=date(2022, 4, 1),
-                              enddate=date(2022, 4, 2),
-                              directory="tests/data/apollo/archive/soh",
+                              startdate=date(2022, 7, 23),
+                              enddate=date(2022, 7, 24),
+                              directory="backupData/apollo/archive/soh",
                               json_dict=json_dict_test,
                               thresholds=thresholds_test,
                               typeofinstrument="")
