@@ -74,10 +74,10 @@ def getsohfiles(
     '''
     files: List[str] = []
     iterdate = startdate
-    # if location is None:
-    #     snlc = f'{network}.{station}.*.{channel}'
-    # else:
-    #     snlc = f'{network}.{station}.{location}.{channel}'
+    if location is None:
+        snlc = f'{network}.{station}.*.{channel}'
+    else:
+        snlc = f'{network}.{station}.{location}.{channel}'
     snlc = f'{network}.{station}..{channel}'
     # Loop through all the dates
     while iterdate < enddate:

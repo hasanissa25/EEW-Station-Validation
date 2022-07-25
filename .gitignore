@@ -67,4 +67,4 @@ tests/generate_ratio_plot/data/*
 tests/run_ispaq/preffile
 stationverification/data/resp_files/*
 stationverification/data/stationXML.dataless
-stationverification/data/QW.xml
+# stationverification/data/QW.xml
