@@ -36,12 +36,12 @@ def get_latencies(
     array_of_daily_latency_dataframes: list
         A list containing pandas latency dataframes for each day
     '''
-    combined_latency_dataframe_for_all_days_dataframe: List[Any] = []
+    list_of_latencies_for_all_days: List[Any] = []
     array_of_daily_latency_objects_max_latency_only: List[Any] = []
     array_of_daily_latency_objects_all_latencies: List[Any] = []
 
     if typeofinstrument == "APOLLO":
-        combined_latency_dataframe_for_all_days_dataframe,\
+        list_of_latencies_for_all_days,\
             array_of_daily_latency_objects_max_latency_only, \
             array_of_daily_latency_objects_all_latencies =\
             get_latencies_from_apollo(
@@ -50,7 +50,7 @@ def get_latencies(
                 station=station)
 
     elif typeofinstrument == "GURALP":
-        combined_latency_dataframe_for_all_days_dataframe, \
+        list_of_latencies_for_all_days, \
             array_of_daily_latency_objects_all_latencies =\
             get_latencies_from_guralp(
                 files=files,
@@ -58,6 +58,6 @@ def get_latencies(
                 enddate=enddate)
         array_of_daily_latency_objects_max_latency_only = \
             array_of_daily_latency_objects_all_latencies
-    return combined_latency_dataframe_for_all_days_dataframe,\
+    return list_of_latencies_for_all_days,\
         array_of_daily_latency_objects_max_latency_only,\
         array_of_daily_latency_objects_all_latencies

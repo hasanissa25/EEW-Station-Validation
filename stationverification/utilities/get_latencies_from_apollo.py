@@ -4,6 +4,7 @@ import logging
 from typing import Any, List, Tuple
 
 import pandas as pd
+import numpy as np
 from pandas.core.frame import DataFrame
 
 from stationverification.utilities import exceptions
@@ -13,17 +14,33 @@ from stationverification.utilities import exceptions
 
 def get_latencies_from_apollo(files: list,
                               network: str,
-                              station: str) -> Tuple[DataFrame, Any, Any]:
-    # Dataframe used to hold latency information for the station
-    columns = ('network', 'station', 'channel',
-               'startTime', 'data_latency')
+                              station: str) -> Tuple[Any, Any, Any]:
+    logging.info("Generating latencies from Apollo files...")
+    combined_latency_data_for_all_days, \
+        array_of_daily_latency_objects_max_latency_only,\
+        array_of_daily_latency_objects_all_latencies = get_latencies_from_apollo_files(
+            files=files, network=network, station=station)
+
+    list_of_latencies_for_all_days = optimize_creating_list_of_latencies(
+        latency_data=combined_latency_data_for_all_days)
+
+    logging.info("Finished creating list of latencies for all days")
+
+    return list_of_latencies_for_all_days, \
+        array_of_daily_latency_objects_max_latency_only,\
+        array_of_daily_latency_objects_all_latencies
+
+
+def get_latencies_from_apollo_files(files: list,
+                                    network: str,
+                                    station: str) -> Tuple[Any, Any, Any]:
     # Storing the data of all the latency files
     combined_latency_data_for_all_days: dict = {}
     # Storing the data of all the latency files seperated into current day
     array_of_daily_latency_objects_max_latency_only: List[Any] = []
     array_of_daily_latency_objects_all_latencies: List[Any] = []
     for file in files:
-        logging.info(f"Fetching latency from: {file}")
+        logging.info(f"Generating latency from: {file}")
         # Opening JSON file
         json_latency_file = open(file)
         try:
@@ -75,22 +92,26 @@ def get_latencies_from_apollo(files: list,
 
         array_of_daily_latency_objects_all_latencies.append(
             current_day_all_latencies)
-    logging.info("Creating Latency Dataframe...")
-    logging.info("Creating JSON...")
-    json_dump = json.dumps(combined_latency_data_for_all_days)
-    with open('all_days_dataframe_as_json.json', 'w') as outfile:
-        outfile.write(json_dump)
-    logging.info("Finished creating JSON...")
-
-    # combined_latency_dataframe_for_all_days_dataframe = pd.DataFrame(
-    #     data=combined_latency_data_for_all_days, index=columns).T
-    combined_latency_dataframe_for_all_days_dataframe = pd.DataFrame(
-        data=[], index=columns).T
-    # logging.info("Finished creating latency dataframe")
-
-    return combined_latency_dataframe_for_all_days_dataframe, \
+    return combined_latency_data_for_all_days, \
         array_of_daily_latency_objects_max_latency_only,\
         array_of_daily_latency_objects_all_latencies
+
+
+def optimize_creating_list_of_latencies(latency_data: dict) -> list:
+    list_of_combined_latencies = []
+    for key, value in latency_data.items():
+        list_of_combined_latencies.append(np.float16(value["data_latency"]))
+    return list_of_combined_latencies
+
+
+def create_latency_dataframe_from_csv_file(path_to_csv_file: str) -> DataFrame:
+    combined_latency_dataframe_for_all_days_dataframe = pd.DataFrame(
+        {'network': [], 'station': [], 'channel': [], "startTime": [],
+         'data_latency': []})
+    combined_latency_dataframe_for_all_days_dataframe = pd.read_csv(
+        path_to_csv_file, dtype={'data_latency': np.float16})
+
+    return combined_latency_dataframe_for_all_days_dataframe
 
 
 def get_latency_value_for_current_timestamp(current_latency: dict,

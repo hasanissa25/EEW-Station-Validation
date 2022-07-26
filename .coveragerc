@@ -29,3 +29,4 @@ omit =
         *stationverification/utilities/handle_running_ispaq_command_CN.py*
         *stationverification/utilities/sohmetrics.py*
         *stationverification/utilities/upload_report_fetch_arguments.py*
+        *stationverification/utilities/generate_combined_latency_dataframe_for_all_days.py*

@@ -1,12 +1,10 @@
 import os
 
 from datetime import date, timedelta
-from typing import Optional
-
-from pandas.core.frame import DataFrame
+from typing import Any, Optional
 
 
-def generate_CSV_from_failed_latencies(latencies: DataFrame,
+def generate_CSV_from_failed_latencies(latency_dataframe: Any,
                                        station: str,
                                        network: str,
                                        startdate: date,
@@ -23,8 +21,10 @@ def generate_CSV_from_failed_latencies(latencies: DataFrame,
     else:
         filename = f'{snlc}.{startdate}_\
 {enddate - timedelta(days=1)}'
-    latencies_above_three = latencies.loc[latencies.data_latency
-                                          > timely_threshold]
+
+    latencies_above_three = latency_dataframe.loc[
+        latency_dataframe.data_latency
+        > timely_threshold]
     # This part is specifically for Guralp Latencies.
     # Need to look into if its neccessary
     # if 'date' in latencies.columns:
@@ -44,7 +44,4 @@ def generate_CSV_from_failed_latencies(latencies: DataFrame,
         os.mkdir('./stationvalidation_output/')
     latencies_above_three_rounded.to_csv(
         f'./stationvalidation_output/{filename}.failed_latencies.csv',
-        index=False)
-    latencies.to_csv(
-        f'./stationvalidation_output/{filename}.all_latencies.csv',
         index=False)

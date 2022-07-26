@@ -320,7 +320,7 @@ metrics are specified in ispaq preference file under {metrics}')
 
 
 def report(
-    combined_latency_dataframe_for_all_days_dataframe: DataFrame,
+    combined_latency_dataframe_for_all_days: DataFrame,
     typeofinstrument: str,
     network: str,
     station: str,
@@ -414,7 +414,7 @@ def report(
 
     try:
         json_dict = latencyreport(
-            combined_latency_dataframe_for_all_days_dataframe=combined_latency_dataframe_for_all_days_dataframe,  # noqa
+            combined_latency_dataframe_for_all_days=combined_latency_dataframe_for_all_days,  # noqa
             network=network,
             station=station,
             json_dict=json_dict,

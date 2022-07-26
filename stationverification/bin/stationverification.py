@@ -123,7 +123,7 @@ def main():
         ))
     process_two.start()
     latency_results = queue.get()
-    combined_latency_dataframe_for_all_days_dataframe,\
+    combined_latency_dataframe_for_all_days,\
         array_of_daily_latency_dataframes_all_latencies = latency_results
     process_one.join()
     logging.info("Finished Process 1: Generating Latency results")
@@ -176,7 +176,7 @@ def main():
     logging.info("Generating report..")
 
     report(
-        combined_latency_dataframe_for_all_days_dataframe=combined_latency_dataframe_for_all_days_dataframe,  # noqa
+        combined_latency_dataframe_for_all_days=combined_latency_dataframe_for_all_days,  # noqa
         typeofinstrument=user_inputs.typeofinstrument,
         network=user_inputs.network,
         station=user_inputs.station,

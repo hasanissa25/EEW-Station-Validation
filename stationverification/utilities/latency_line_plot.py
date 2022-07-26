@@ -82,110 +82,111 @@ def latency_line_plot(
     {startdate_dateobject}')
             plt.ylabel("Latency (seconds)")
             threshold = timely_threshold
+            if not HNN_latencies.empty:
+                axes[0].set_ylim([0, 10])
+                # Setting up our data
+                x_axis = HNN_latencies.startTime
+                x_axis_as_dates = [arrow.get(x).datetime for x in x_axis]
+                axes[0].set_xlim(
+                    [x_axis_as_dates[0],
+                        x_axis_as_dates[0]+timedelta(hours=24)])
+                y_axis = HNN_latencies.data_latency
 
-            axes[0].set_ylim([0, 10])
-            # Setting up our data
-            x_axis = HNN_latencies.startTime
-            x_axis_as_dates = [arrow.get(x).datetime for x in x_axis]
-            axes[0].set_xlim(
-                [x_axis_as_dates[0], x_axis_as_dates[0]+timedelta(hours=24)])
-            y_axis = HNN_latencies.data_latency
+                # Format the dates on the x-axis
+                formatter = mdates.DateFormatter("%Y-%m-%d:%H:%M")
+                axes[0].xaxis.set_major_formatter(formatter)
+                locator = mdates.HourLocator()
+                axes[0].xaxis.set_major_locator(locator)
+                axes[0].tick_params(axis='x', labelrotation=90)
 
-            # Format the dates on the x-axis
-            formatter = mdates.DateFormatter("%Y-%m-%d:%H:%M")
-            axes[0].xaxis.set_major_formatter(formatter)
-            locator = mdates.HourLocator()
-            axes[0].xaxis.set_major_locator(locator)
-            axes[0].tick_params(axis='x', labelrotation=90)
+                # Plotting the data
 
-            # Plotting the data
+                axes[0].plot(
+                    x_axis_as_dates, y_axis,
+                    marker='o', label='HNN Latency values', linewidth=1,
+                    markeredgewidth=1,
+                    markersize=1, markevery=100000, c="green")
+                # Show the grid
+                axes[0].set_axisbelow(True)
+                axes[0].grid(visible=True, which='both',
+                             axis='both', linewidth=0.5)
+                # Adding the threshold line
+                axes[0].axhline(threshold, color='r', linewidth="1",
+                                linestyle='--',
+                                label=f"Data Timeliness threshold: \
+    {timely_threshold} seconds")
 
-            axes[0].plot(
-                x_axis_as_dates, y_axis,
-                marker='o', label='HNN Latency values', linewidth=1,
-                markeredgewidth=1,
-                markersize=1, markevery=100000, c="green")
-            # Show the grid
-            axes[0].set_axisbelow(True)
-            axes[0].grid(visible=True, which='both',
-                         axis='both', linewidth=0.5)
-            # Adding the threshold line
-            axes[0].axhline(threshold, color='r', linewidth="1",
-                            linestyle='--',
-                            label=f"Data Timeliness threshold: \
-{timely_threshold} seconds")
+                legend = axes[0].legend(bbox_to_anchor=(1, 1),
+                                        loc='upper right', fontsize="9")
+            if not HNE_latencies.empty:
+                # Setting up the second plot for channel HNE
 
-            legend = axes[0].legend(bbox_to_anchor=(1, 1),
-                                    loc='upper right', fontsize="9")
+                axes[1].set_ylim([0, 10])
 
-            # Setting up the second plot for channel HNE
+                # Setting up our data
+                x_axis = HNE_latencies.startTime
+                x_axis_as_dates = [arrow.get(x).datetime for x in x_axis]
+                y_axis = HNE_latencies.data_latency
 
-            axes[1].set_ylim([0, 10])
+                # Format the dates on the x-axis
+                formatter = mdates.DateFormatter("%Y-%m-%d:%H:%M")
+                axes[1].xaxis.set_major_formatter(formatter)
+                locator = mdates.HourLocator()
+                axes[1].xaxis.set_major_locator(locator)
+                axes[1].tick_params(axis='x', labelrotation=90)
 
-            # Setting up our data
-            x_axis = HNE_latencies.startTime
-            x_axis_as_dates = [arrow.get(x).datetime for x in x_axis]
-            y_axis = HNE_latencies.data_latency
+                # Plotting the data
+                axes[1].plot(
+                    x_axis_as_dates, y_axis,
+                    marker='o', label='HNE Latency values', linewidth=1,
+                    markeredgewidth=1,
+                    markersize=1, markevery=100000, c="green")
+                # Show the grid
+                axes[1].set_axisbelow(True)
+                axes[1].grid(visible=True, which='both',
+                             axis='both', linewidth=0.5)
+                # Adding the threshold line
+                axes[1].axhline(threshold, color='r', linewidth="1",
+                                linestyle='--',
+                                label=f"Data Timeliness threshold: \
+    {timely_threshold} seconds")
 
-            # Format the dates on the x-axis
-            formatter = mdates.DateFormatter("%Y-%m-%d:%H:%M")
-            axes[1].xaxis.set_major_formatter(formatter)
-            locator = mdates.HourLocator()
-            axes[1].xaxis.set_major_locator(locator)
-            axes[1].tick_params(axis='x', labelrotation=90)
+                legend = axes[1].legend(bbox_to_anchor=(1, 1),
+                                        loc='upper right', fontsize="9")
+            if not HNZ_latencies.empty:
+                # Setting up the third plot for channel HNZ
+                axes[2].set_ylim([0, 10])
 
-            # Plotting the data
-            axes[1].plot(
-                x_axis_as_dates, y_axis,
-                marker='o', label='HNE Latency values', linewidth=1,
-                markeredgewidth=1,
-                markersize=1, markevery=100000, c="green")
-            # Show the grid
-            axes[1].set_axisbelow(True)
-            axes[1].grid(visible=True, which='both',
-                         axis='both', linewidth=0.5)
-            # Adding the threshold line
-            axes[1].axhline(threshold, color='r', linewidth="1",
-                            linestyle='--',
-                            label=f"Data Timeliness threshold: \
-{timely_threshold} seconds")
+                # Setting up our data
+                x_axis = HNZ_latencies.startTime
+                x_axis_as_dates = [arrow.get(x).datetime for x in x_axis]
+                y_axis = HNZ_latencies.data_latency
 
-            legend = axes[1].legend(bbox_to_anchor=(1, 1),
-                                    loc='upper right', fontsize="9")
+                # Format the dates on the x-axis
+                formatter = mdates.DateFormatter("%Y-%m-%d:%H:%M")
+                axes[2].xaxis.set_major_formatter(formatter)
+                locator = mdates.HourLocator()
+                axes[2].xaxis.set_major_locator(locator)
+                axes[2].tick_params(axis='x', labelrotation=90)
 
-            # Setting up the third plot for channel HNZ
-            axes[2].set_ylim([0, 10])
+                # Plotting the data
+                axes[2].plot(
+                    x_axis_as_dates, y_axis,
+                    marker='o', label='HNZ Latency values', linewidth=1,
+                    markeredgewidth=1,
+                    markersize=1, markevery=100000, c="green")
+                # Show the grid
+                axes[2].set_axisbelow(True)
+                axes[2].grid(visible=True, which='both',
+                             axis='both', linewidth=0.5)
+                # Adding the threshold line
+                axes[2].axhline(threshold, color='r', linewidth="1",
+                                linestyle='--',
+                                label=f"Data Timeliness threshold: \
+    {timely_threshold} seconds")
 
-            # Setting up our data
-            x_axis = HNZ_latencies.startTime
-            x_axis_as_dates = [arrow.get(x).datetime for x in x_axis]
-            y_axis = HNZ_latencies.data_latency
-
-            # Format the dates on the x-axis
-            formatter = mdates.DateFormatter("%Y-%m-%d:%H:%M")
-            axes[2].xaxis.set_major_formatter(formatter)
-            locator = mdates.HourLocator()
-            axes[2].xaxis.set_major_locator(locator)
-            axes[2].tick_params(axis='x', labelrotation=90)
-
-            # Plotting the data
-            axes[2].plot(
-                x_axis_as_dates, y_axis,
-                marker='o', label='HNZ Latency values', linewidth=1,
-                markeredgewidth=1,
-                markersize=1, markevery=100000, c="green")
-            # Show the grid
-            axes[2].set_axisbelow(True)
-            axes[2].grid(visible=True, which='both',
-                         axis='both', linewidth=0.5)
-            # Adding the threshold line
-            axes[2].axhline(threshold, color='r', linewidth="1",
-                            linestyle='--',
-                            label=f"Data Timeliness threshold: \
-{timely_threshold} seconds")
-
-            legend = axes[2].legend(bbox_to_anchor=(1, 1),
-                                    loc='upper right', fontsize="9")
+                legend = axes[2].legend(bbox_to_anchor=(1, 1),
+                                        loc='upper right', fontsize="9")
             fig.tight_layout()  # Important for the plot labels to not overlap
             if not os.path.isdir('./stationvalidation_output/'):
                 os.mkdir('./stationvalidation_output/')
