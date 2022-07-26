@@ -91,6 +91,7 @@ def timely_availability_plot(
     number_of_days_as_array = np.arange(number_of_days)
     width_between_ticks = 0.4
     bar_width = 0.4
+
     if len(HNN_timely_availability_percentage_array) == len(x_axis) and\
         len(HNE_timely_availability_percentage_array) == len(x_axis) and\
             len(HNE_timely_availability_percentage_array) == len(x_axis) and \
@@ -119,22 +120,24 @@ def timely_availability_plot(
         # axes[0].bar(x_axis, [100], color="red")
         # axes[0].bar(x_axis, y_axis,
         #             label='HNN Timely Availability [%]')
-        axes[0].bar(number_of_days_as_array, y_axis,
-                    bar_width, label='HNN Timely Availability [%]',
-                    color="blue")
-        axes[0].bar(number_of_days_as_array + width_between_ticks,
-                    percent_availability_array_HNN_rounded,
-                    bar_width, label='HNN Percent Availability [%]',
-                    color="green")
-        for bars in axes[0].containers:
-            axes[0].bar_label(bars)
-        legend = axes[0].legend(bbox_to_anchor=(1.1, 1),
-                                loc='upper right', fontsize="10")
-        # Show the grid
-        axes[0].set_axisbelow(True)
-        axes[0].grid(visible=True, which='both',
-                     axis='both', linewidth=0.5)
-        axes[0].set_ylim(ymin=0, ymax=100)
+        logging.info(f'number_of_days_as_array \n{number_of_days_as_array}')
+        if len(number_of_days_as_array) == len(y_axis):
+            axes[0].bar(number_of_days_as_array, y_axis,
+                        bar_width, label='HNN Timely Availability [%]',
+                        color="blue")
+            axes[0].bar(number_of_days_as_array + width_between_ticks,
+                        percent_availability_array_HNN_rounded,
+                        bar_width, label='HNN Percent Availability [%]',
+                        color="green")
+            for bars in axes[0].containers:
+                axes[0].bar_label(bars)
+            legend = axes[0].legend(bbox_to_anchor=(1.1, 1),
+                                    loc='upper right', fontsize="10")
+            # Show the grid
+            axes[0].set_axisbelow(True)
+            axes[0].grid(visible=True, which='both',
+                         axis='both', linewidth=0.5)
+            axes[0].set_ylim(ymin=0, ymax=100)
 
         # # Second plot
         # Setting up our data
@@ -143,22 +146,23 @@ def timely_availability_plot(
         loc = plticker.MultipleLocator(base=10)
         axes[1].yaxis.set_major_locator(loc)
         y_axis = HNE_timely_availability_percentage_array
-        axes[1].bar(number_of_days_as_array, y_axis,
-                    bar_width, label='HNE Timely Availability [%]',
-                    color="blue")
-        axes[1].bar(number_of_days_as_array + width_between_ticks,
-                    percent_availability_array_HNE_rounded,
-                    bar_width, label='HNE Percent Availability [%]',
-                    color="green")
-        for bars in axes[1].containers:
-            axes[1].bar_label(bars)
-        legend = axes[1].legend(bbox_to_anchor=(1.1, 1),
-                                loc='upper right')
-        # Show the grid
-        axes[1].set_axisbelow(True)
-        axes[1].grid(visible=True, which='both',
-                     axis='both', linewidth=0.5)
-        axes[1].set_ylim(ymin=0, ymax=100)
+        if len(number_of_days_as_array) == len(y_axis):
+            axes[1].bar(number_of_days_as_array, y_axis,
+                        bar_width, label='HNE Timely Availability [%]',
+                        color="blue")
+            axes[1].bar(number_of_days_as_array + width_between_ticks,
+                        percent_availability_array_HNE_rounded,
+                        bar_width, label='HNE Percent Availability [%]',
+                        color="green")
+            for bars in axes[1].containers:
+                axes[1].bar_label(bars)
+            legend = axes[1].legend(bbox_to_anchor=(1.1, 1),
+                                    loc='upper right')
+            # Show the grid
+            axes[1].set_axisbelow(True)
+            axes[1].grid(visible=True, which='both',
+                         axis='both', linewidth=0.5)
+            axes[1].set_ylim(ymin=0, ymax=100)
 
         # # Third plot
         # Setting up our data
@@ -166,22 +170,23 @@ def timely_availability_plot(
         loc = plticker.MultipleLocator(base=10)
         axes[2].yaxis.set_major_locator(loc)
         y_axis = HNZ_timely_availability_percentage_array
-        axes[2].bar(number_of_days_as_array, y_axis,
-                    bar_width, label='HNZ Timely Availability [%]',
-                    color="blue")
-        axes[2].bar(number_of_days_as_array + width_between_ticks,
-                    percent_availability_array_HNZ_rounded,
-                    bar_width, label='HNZ Percent Availability [%]',
-                    color="green")
-        for bars in axes[2].containers:
-            axes[2].bar_label(bars)
-        legend = axes[2].legend(bbox_to_anchor=(1.1, 1),
-                                loc='upper right')
-        # Show the grid
-        axes[2].set_axisbelow(True)
-        axes[2].grid(visible=True, which='both',
-                     axis='both', linewidth=0.5)
-        axes[2].set_ylim(ymin=0, ymax=100)
+        if len(number_of_days_as_array) == len(y_axis):
+            axes[2].bar(number_of_days_as_array, y_axis,
+                        bar_width, label='HNZ Timely Availability [%]',
+                        color="blue")
+            axes[2].bar(number_of_days_as_array + width_between_ticks,
+                        percent_availability_array_HNZ_rounded,
+                        bar_width, label='HNZ Percent Availability [%]',
+                        color="green")
+            for bars in axes[2].containers:
+                axes[2].bar_label(bars)
+            legend = axes[2].legend(bbox_to_anchor=(1.1, 1),
+                                    loc='upper right')
+            # Show the grid
+            axes[2].set_axisbelow(True)
+            axes[2].grid(visible=True, which='both',
+                         axis='both', linewidth=0.5)
+            axes[2].set_ylim(ymin=0, ymax=100)
 
         fig.tight_layout()  # Important for the plot labels to not overlap
         if not os.path.isdir('./stationvalidation_output/'):

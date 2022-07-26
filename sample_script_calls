@@ -20,7 +20,7 @@ Parameters:
 Sample Calls:
 
 stationverification script:
-    time nohup stationverification -T APOLLO -N QW -S BCV09 -L 00 -d 2022-7-23 -e 2022-7-24  >> logs/BCV09_log.out &
+    time nohup stationverification -T APOLLO -N QW -S BCV18 -L 00 -d 2022-7-17 -e 2022-7-27  >> logs/BCV18_log.out &
 
 latency script:
     time nohup stationverificationlatency -T APOLLO -N QW -S BCL01 -d 2022-6-25 -e 2022-7-5  >> logs/BCL01-Latency_log &
