@@ -121,7 +121,9 @@ def timely_availability_plot(
         # axes[0].bar(x_axis, y_axis,
         #             label='HNN Timely Availability [%]')
         logging.info(f'number_of_days_as_array \n{number_of_days_as_array}')
-        if len(number_of_days_as_array) == len(y_axis):
+        if len(number_of_days_as_array) == len(y_axis) and \
+                len(number_of_days_as_array) == len(
+                    percent_availability_array_HNN_rounded):
             axes[0].bar(number_of_days_as_array, y_axis,
                         bar_width, label='HNN Timely Availability [%]',
                         color="blue")
@@ -146,7 +148,9 @@ def timely_availability_plot(
         loc = plticker.MultipleLocator(base=10)
         axes[1].yaxis.set_major_locator(loc)
         y_axis = HNE_timely_availability_percentage_array
-        if len(number_of_days_as_array) == len(y_axis):
+        if len(number_of_days_as_array) == len(y_axis) and \
+                len(number_of_days_as_array) == len(
+                    percent_availability_array_HNE_rounded):
             axes[1].bar(number_of_days_as_array, y_axis,
                         bar_width, label='HNE Timely Availability [%]',
                         color="blue")
@@ -170,7 +174,9 @@ def timely_availability_plot(
         loc = plticker.MultipleLocator(base=10)
         axes[2].yaxis.set_major_locator(loc)
         y_axis = HNZ_timely_availability_percentage_array
-        if len(number_of_days_as_array) == len(y_axis):
+        if len(number_of_days_as_array) == len(y_axis) and \
+                len(number_of_days_as_array) == len(
+                    percent_availability_array_HNZ_rounded):
             axes[2].bar(number_of_days_as_array, y_axis,
                         bar_width, label='HNZ Timely Availability [%]',
                         color="blue")
