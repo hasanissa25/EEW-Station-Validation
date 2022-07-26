@@ -120,7 +120,6 @@ def timely_availability_plot(
         # axes[0].bar(x_axis, [100], color="red")
         # axes[0].bar(x_axis, y_axis,
         #             label='HNN Timely Availability [%]')
-        logging.info(f'number_of_days_as_array \n{number_of_days_as_array}')
         if len(number_of_days_as_array) == len(y_axis) and \
                 len(number_of_days_as_array) == len(
                     percent_availability_array_HNN_rounded):
@@ -133,8 +132,6 @@ def timely_availability_plot(
                         color="green")
             for bars in axes[0].containers:
                 axes[0].bar_label(bars)
-            legend = axes[0].legend(bbox_to_anchor=(1.1, 1),
-                                    loc='upper right', fontsize="10")
             # Show the grid
             axes[0].set_axisbelow(True)
             axes[0].grid(visible=True, which='both',
@@ -160,8 +157,6 @@ def timely_availability_plot(
                         color="green")
             for bars in axes[1].containers:
                 axes[1].bar_label(bars)
-            legend = axes[1].legend(bbox_to_anchor=(1.1, 1),
-                                    loc='upper right')
             # Show the grid
             axes[1].set_axisbelow(True)
             axes[1].grid(visible=True, which='both',
@@ -186,14 +181,19 @@ def timely_availability_plot(
                         color="green")
             for bars in axes[2].containers:
                 axes[2].bar_label(bars)
-            legend = axes[2].legend(bbox_to_anchor=(1.1, 1),
-                                    loc='upper right')
+
             # Show the grid
             axes[2].set_axisbelow(True)
             axes[2].grid(visible=True, which='both',
                          axis='both', linewidth=0.5)
             axes[2].set_ylim(ymin=0, ymax=100)
 
+        legend = axes[0].legend(bbox_to_anchor=(1.1, 1),
+                                loc='upper right', fontsize="10")
+        legend = axes[1].legend(bbox_to_anchor=(1.1, 1),
+                                loc='upper right')
+        legend = axes[2].legend(bbox_to_anchor=(1.1, 1),
+                                loc='upper right')
         fig.tight_layout()  # Important for the plot labels to not overlap
         if not os.path.isdir('./stationvalidation_output/'):
             os.mkdir('./stationvalidation_output/')
