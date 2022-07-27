@@ -8,7 +8,7 @@ def test_generate_CSV_from_failed_latencies(latency_parameters_nanometrics, late
     combined_latency_dataframe_for_all_days = latency_dataframe
     subprocess.getoutput(
         "rm -rf 'stationvalidation_output'")
-    generate_CSV_from_failed_latencies(latencies=combined_latency_dataframe_for_all_days,
+    generate_CSV_from_failed_latencies(latency_dataframe=combined_latency_dataframe_for_all_days,
                                        station=latency_parameters_nanometrics.station,
                                        network=latency_parameters_nanometrics.network,
                                        startdate=latency_parameters_nanometrics.startdate,

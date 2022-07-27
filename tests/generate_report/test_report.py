@@ -16,7 +16,7 @@ def test_report(gather_stats_parameters, report_parameters):
         metrics=gather_stats_parameters.metrics,
         ispaq_output_directory=gather_stats_parameters.ispaq_output_directory,
     )
-    combined_latency_dataframe_for_all_days_dataframe = \
+    combined_latency_dataframe_for_all_days = \
         generate_latency_results(typeofinstrument=report_parameters.typeofinstrument,
                                  network=report_parameters.network,
                                  station=report_parameters.station,
@@ -25,7 +25,7 @@ def test_report(gather_stats_parameters, report_parameters):
                                  path=report_parameters.latencyFiles,
                                  timely_threshold=report_parameters.thresholds.getfloat(
                                      'thresholds', 'data_timeliness', fallback=3))
-    report(combined_latency_dataframe_for_all_days_dataframe=combined_latency_dataframe_for_all_days_dataframe,
+    report(combined_latency_dataframe_for_all_days=combined_latency_dataframe_for_all_days,
            typeofinstrument=report_parameters.typeofinstrument,
            network=report_parameters.network,
            station=report_parameters.station,

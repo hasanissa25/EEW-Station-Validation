@@ -3,6 +3,8 @@ import subprocess
 import pytest
 from stationverification.utilities.get_latencies_from_apollo import get_latencies_from_apollo
 from stationverification.utilities import exceptions
+import numpy as np
+import logging
 
 
 def test_get_latencies_from_apollo(latency_parameters_nanometrics,
@@ -17,10 +19,10 @@ def test_get_latencies_from_apollo(latency_parameters_nanometrics,
             network=latency_parameters_nanometrics.network,
             station=latency_parameters_nanometrics.station)
 
-    assert combined_latency_dataframe_for_all_days_dataframe.loc[
-        "QW.QCC02.HNE.2022-04-03T00:00:00.000000000Z.max"].data_latency == 3.5
-    assert combined_latency_dataframe_for_all_days_dataframe.loc[
-        "QW.QCC02.HNZ.2022-04-03T00:00:00.000000000Z.min"].data_latency == 2.6
+    ar = np.array(combined_latency_dataframe_for_all_days_dataframe)
+    br = np.array([
+        3.5, 1.5, 2.0, 2.0, 6.0, 2.0, 3.0, 3.0, 4.5, 2.6, 3.0, 3.0, 3.0])
+    assert ar.all() == br.all()
     with pytest.raises(exceptions.LatencyFileError):
         get_latencies_from_apollo(
             files=latency_test_file_nanometrics_bad_file,
