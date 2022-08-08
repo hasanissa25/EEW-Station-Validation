@@ -45,6 +45,7 @@ latency/*
 stationvalidation_output/*
 station_validation_results/*
 station_validation_latency_results/*
+validation_results/*
 
 hasan/*
 distribution/*
