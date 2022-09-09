@@ -4,7 +4,11 @@ from configparser import ConfigParser
 from dateutil import parser as dateparser  # type: ignore
 
 from stationverification.utilities import exceptions
+
 from stationverification.config import get_default_parameters
+
+from stationverification.utilities.fetch_type_of_instrument_from_stationxml \
+    import fetch_type_of_instrument_from_stationxml
 
 
 class UserInput(dict):
@@ -84,9 +88,9 @@ class UserInput(dict):
     def s3directory(self) -> list:
         return self["s3directory"]
 
-    @property
-    def stationconf(self) -> list:
-        return self["stationconf"]
+    # @property
+    # def stationconf(self) -> list:
+    #     return self["stationconf"]
 
 
 def fetch_arguments() -> UserInput:
@@ -105,12 +109,12 @@ def fetch_arguments() -> UserInput:
         help="Which 'directory' in S3 to save to",
         type=str,
     )
-    argsparser.add_argument(
-        '-c',
-        '--stationconfig',
-        help='Path to the file that contains station information.',
-        type=str,
-    )
+    # argsparser.add_argument(
+    #     '-c',
+    #     '--stationconfig',
+    #     help='Path to the file that contains station information.',
+    #     type=str,
+    # )
     argsparser.add_argument(
         "-d",
         "--startdate",
@@ -220,13 +224,13 @@ span',
         help='Overrides the default config file.',
         type=str
     )
-    argsparser.add_argument(
-        '-T',
-        '--typeofinstrument',
-        help='type of instrument used, APOLLO or GURALP',
-        required=True,
-        type=str
-    )
+    # argsparser.add_argument(
+    #     '-T',
+    #     '--typeofinstrument',
+    #     help='type of instrument used, APOLLO or GURALP',
+    #     required=True,
+    #     type=str
+    # )
     argsparser.add_argument(
         '-U',
         '--uploadresultstos3',
@@ -239,7 +243,6 @@ span',
     default_parameters = get_default_parameters()
 
     # Parameters required on every script call, with no default values
-    typeofinstrument = args.typeofinstrument
     station = args.station
     network = args.network
     startdate = (dateparser.parse(args.startdate, yearfirst=True)).date()
@@ -247,8 +250,12 @@ span',
     # Only one of them is required, either station_url or stationconf
     station_url = args.station_url if args.station_url is not None\
         else default_parameters.STATION_URL
-    stationconf = args.stationconfig if args.stationconfig is not None\
-        else default_parameters.STATION_CONFIG
+    # stationconf = args.stationconfig if args.stationconfig is not None\
+    #     else default_parameters.STATION_CONFIG
+    typeofinstrument = fetch_type_of_instrument_from_stationxml(
+        network=network,
+        station=station,
+        station_xml=station_url)
 
     # Config files
     pfile = args.preference_file if args.preference_file is not None\
@@ -265,15 +272,15 @@ span',
 
     latencyFiles = args.latency if args.latency is not None\
         else default_parameters.APOLLO_LATENCY_ARCHIVE \
-        if typeofinstrument == "APOLLO" \
+        if typeofinstrument.lower() == "titansma" \
         else default_parameters.GURALP_LATENCY_ARCHIVE
     miniseedarchive = args.miniseedarchive if args.miniseedarchive is not None\
         else default_parameters.APOLLO_MINISEED_ARCHIVE \
-        if typeofinstrument == "APOLLO" \
+        if typeofinstrument.lower() == "titansma" \
         else default_parameters.GURALP_MINISEED_ARCHIVE
     soharchive = args.soh_archive if args.soh_archive is not None\
         else default_parameters.APOLLO_SOH_ARCHIVE \
-        if typeofinstrument == "APOLLO" \
+        if typeofinstrument.lower() == "titansma" \
         else default_parameters.GURALP_SOH_ARCHIVE
     outputdir = args.outputdir if args.outputdir is not None\
         else default_parameters.OUTPUT_DIRECTORY
@@ -319,4 +326,5 @@ the enddate to the day after the startdate')
                      uploadresultstos3=uploadresultstos3,
                      bucketName=bucketName,
                      s3directory=s3directory,
-                     stationconf=stationconf)
+                     #  stationconf=stationconf
+                     )

@@ -1,122 +1,167 @@
 import os
-from typing import Optional
-import arrow
+import itertools
+import re
+import obspy
+import numpy as np
 
 from datetime import date, timedelta
-import matplotlib
+from typing import Any, List
 import matplotlib.pyplot as plt
-import matplotlib.ticker as plticker
 import matplotlib.dates as mdates
 
 
-def plot_clock_offset(network: str,
-                      station: str,
-                      startdate: date,
-                      enddate: date,
-                      results: tuple,
-                      threshold: float,
-                      location: Optional[str] = None):
+def plot_clock_offset(
+        list_of_streams: List,
+        clock_offset_threshold_in_microseconds: float,
+        network: str,
+        station: str,
+        startdate: date,
+        enddate: date,
+        location: Any = None):
 
-    number_of_expected_samples = 1440
-    x_axis = list(range(0, number_of_expected_samples))
+    for stream in list_of_streams:
+        create_line_plot(
+            stream=stream,
+            clock_offset_threshold_in_microseconds=clock_offset_threshold_in_microseconds  # noqa
+        )
+    create_bar_graph(
+        list_of_streams=list_of_streams,
+        clock_offset_threshold_in_microseconds=clock_offset_threshold_in_microseconds,  # noqa
+        network=network,
+        station=station,
+        startdate=startdate,
+        enddate=enddate,
+        location=location
+    )
 
-    clock_locked_data, clock_offset_data = results
-    font = {'size': 13}
-    matplotlib.rc('font', **font)
-    if len(clock_locked_data) == len(clock_offset_data):
-        for index, clock_offset_data in enumerate(clock_offset_data):
-            if(len(clock_offset_data) == number_of_expected_samples):
-                # Setting up the figure
-                fig, axes = plt.subplots(
-                    2, 1, sharex=True, sharey=False, figsize=(18.5, 10.5))
-                loc = plticker.MultipleLocator(base=0.5)
-                axes[0].yaxis.set_major_locator(loc)
 
-                # add a big axis, hide frame
-                fig.add_subplot(111, frameon=False)
+def create_line_plot(stream: obspy.Stream,
+                     clock_offset_threshold_in_microseconds: float):
+    trace = stream[0]
+    # Setting up name of plot
+    network = trace.stats.network
+    station = trace.stats.station
+    location = trace.stats.location
+    startingdate = re.findall("([^T]*)", f'{trace.stats.starttime}')[0]
+    if location is None:
+        snlc = f'{network}.{station}..'
+    else:
+        snlc = f'{network}.{station}.{location}.'
+    filename = f'{snlc}.{startingdate}'
 
-                # hide tick and tick label of the big axis
-                plt.tick_params(labelcolor='none', which='both', top=False,
-                                bottom=False, left=False, right=False)
+    # Setting up the data and threshold
+    '''
+        The raw channel values are in counts and should be multiplied
+        by the calibration value of 24.112654 to get a number of
+        nanoseconds of offset. The timing quality will remain
+        'fine locked' as long as the time offset from the time source
+        is within half of a sample period. The system is operating in
+        5000 samples per second so as long as the time difference
+        is kept within 100000ns (1s / 5000sps / 2) there is no threat
+        to the sample timing precision.
+        '''
+    offsets = (abs((trace.data * 24.112654) / 1000))
 
-                # Setting up the current plot
-                if location is None:
-                    snlc = f'{network}.{station}..'
-                else:
-                    snlc = f'{network}.{station}.{location}.'
-                filename = f'{snlc}.{startdate + timedelta(days=index)}'
-                plt.title(
-                    f'Timing Error (+/- 0.5 microseconds rounded to 0)\n\
-{filename}')
-                # Generatre x-axis values as days since startdate
-                x_axis_as_dates = [
-                    arrow.get(arrow.get(startdate +
-                              timedelta(days=index)).datetime +
-                              timedelta(minutes=x)).datetime
-                    for x in x_axis]
+    # Setting up the figure
+    fig = plt.figure()
+    axes = fig.add_subplot(1, 1, 1)
+    axes.plot(trace.times("matplotlib"), offsets, "b-")
+    plt.title(
+        f'Clock Offset\n\
+    {filename}')
+    # Formatting the X axis
+    formatter = mdates.DateFormatter("%Y-%m-%d:%H:%M")
+    axes.xaxis.set_major_formatter(formatter)
+    locator = mdates.HourLocator()
+    axes.xaxis.set_major_locator(locator)
+    axes.tick_params(axis='x', labelrotation=90)
 
-                # First Plot
-                axes[0].plot(
-                    x_axis_as_dates, clock_offset_data,
-                    marker='o', label='Clock offset', linewidth=1,
-                    markeredgewidth=1,
-                    markersize=1, markevery=60, c="green")
-                axes[0].set_ylabel('Timing Error (microseconds)')
-                # Format the axis values
-                formatter = mdates.DateFormatter("%Y-%m-%d:%H:%M")
-                axes[0].xaxis.set_major_formatter(formatter)
-                locator = mdates.HourLocator()
-                axes[0].xaxis.set_major_locator(locator)
-                axes[0].tick_params(axis='x', labelrotation=90)
-                axes[0].set_ylim(ymin=-2, ymax=2)
+    # Formatting the Y axis
+    axes.set_ylim(ymin=0, ymax=110)
+    axes.set_ylabel('Clock Offset (microseconds)')
+    # Adding a grid
+    # axes.set_axisbelow(True)
+    axes.grid(visible=True, which='both',
+              axis='both', linewidth=0.5)
 
-                # Add a grid to the plot to make the symmetry more obvious
-                axes[0].set_axisbelow(True)
-                axes[0].grid(visible=True, which='both',
-                             axis='both', linewidth=0.5)
+    # Adding the threshold line
+    axes.axhline(clock_offset_threshold_in_microseconds, color='r',
+                 linewidth="1",
+                 linestyle='--',
+                 label=f'Clock Offset Threshold: \
+{clock_offset_threshold_in_microseconds} microseconds')
+    # Adding a legend
+    legend = axes.legend(bbox_to_anchor=(1, 1),
+                         loc='upper right')
+    if not os.path.isdir("./stationvalidation_output"):
+        os.mkdir('./stationvalidation_output')
+    plt.savefig(
+        f'stationvalidation_output/{filename}.clock_offset.png',
+        dpi=300, bbox_extra_artists=(legend,), bbox_inches='tight')
+    plt.close()
 
-                # Adding the threshold line
-                axes[0].axhline(threshold, color='r', linewidth="1",
-                                linestyle='--',
-                                label=f'Timing Error Thresholds: \
-+/- {threshold} microseconds')
-                axes[0].axhline(-threshold, color='r',
-                                linewidth="1", linestyle='--')
-                # Adding the legend
-                legend = axes[0].legend(bbox_to_anchor=(1, 1),
-                                        loc='upper right')
 
-                # Second Plot
-                axes[1].plot(
-                    x_axis_as_dates, clock_locked_data[index],
-                    marker='o',  label='0 = Clock is Off, 1 = Clock is Unlocked, 2\
-= Clock is Locked', linewidth=1,
-                    markeredgewidth=1,
-                    markersize=1, markevery=60, c="green")
-                # Add a y-label to the axes.
-                axes[1].set_ylabel('Clock Status')
-                axes[1].tick_params(axis='x', labelrotation=90)
+def create_bar_graph(list_of_streams: np.ndarray,
+                     clock_offset_threshold_in_microseconds: float,
+                     network: str,
+                     station: str,
+                     startdate: date,
+                     enddate: date,
+                     location: Any = None
+                     ):
+    # Setting up the data
+    list_of_clock_offsets = []
+    for stream in list_of_streams:
+        list_of_clock_offsets.append(stream[0].data)
+    flat_list_of_clock_offsets = list(itertools.chain(*list_of_clock_offsets))
 
-            # labelpad=20
-                axes[1].set_ylim(ymin=-1, ymax=3)
+    # Setting up the file name and plot name based on whether its a one day \
+    # validation period or not to know if we include end date or not
+    filename = ""
+    if location is None:
+        snlc = f'{network}.{station}..'
+    else:
+        snlc = f'{network}.{station}.{location}.'
+    if startdate == enddate - timedelta(days=1):
+        filename = f'{snlc}.{startdate}.clock_offset_log_plot.png'
+        plottitle = f'Clock Offset log plot for {network}.{station} \
+\n {startdate}'
+    else:
+        filename = f'{snlc}.{startdate}_\
+{enddate - timedelta(days=1)}.clock_offset_log_plot.png'
+        plottitle = f'Clock Offset log plot for  {network}.{station} \n {startdate} to\
+ {enddate - timedelta(days=1)}'
 
-                # Add a grid to the plot to make the symmetry more obvious
-                axes[1].set_axisbelow(True)
-                axes[1].grid(visible=True, which='both',
-                             axis='both', linewidth=0.5)
-                # this locator puts ticks at regular intervals in steps of\
-                #  "base"
-                loc = plticker.MultipleLocator(base=1)
-                axes[1].yaxis.set_major_locator(loc)
-                # Adding the legend
-                legend = axes[1].legend(bbox_to_anchor=(1, 1),
-                                        loc='upper right')
-                # Save the plot to file and then close it so the next \
-                # channel's metrics aren't plotted on the same plot
-                # Write the plot to the output directory
-                if not os.path.isdir("./stationvalidation_output"):
-                    os.mkdir('./stationvalidation_output')
-                plt.savefig(
-                    f'stationvalidation_output/{filename}.timing_error.png',
-                    dpi=300, bbox_extra_artists=(legend,), bbox_inches='tight')
-                plt.close()
+    # Setting up the figure
+    fig = plt.figure()
+    fig.set_size_inches(18.5, 10.5)
+
+    ax1 = fig.add_subplot(111)
+    ax1.set_title(plottitle)  # Add a title to the axes.
+    ax1.set_xlabel('Clock Offset (microseconds)', fontsize=13)
+    ax1.set_ylabel('Occurrences', fontsize=13)  # Add a y-label to the axes.
+    ax1.set_yscale('log')
+
+    ax1.set_axisbelow(True)
+    plt.grid(visible=True, which='both', axis='both', linewidth=0.5)
+
+    # Adding the threshold line
+    threshold = clock_offset_threshold_in_microseconds
+    plt.axvline(threshold, color='r', linestyle='--', linewidth=1,
+                label=f"Data Timeliness threshold: \
+{clock_offset_threshold_in_microseconds} seconds")
+    legend = ax1.legend(bbox_to_anchor=(1.1, 1),
+                        loc='upper right', fontsize="13")
+
+    fig.tight_layout()  # Important for the plot labels to not overlap
+
+    # Adding the data
+    ax1.hist(flat_list_of_clock_offsets, ec='black')
+
+    if not os.path.isdir('./stationvalidation_output/'):
+        os.mkdir('./stationvalidation_output/')
+    plt.savefig(
+        f'./stationvalidation_output/{filename}',
+        bbox_extra_artists=(legend,),
+        bbox_inches='tight')
+    plt.close()

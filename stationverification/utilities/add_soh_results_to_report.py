@@ -1,8 +1,12 @@
 from stationverification.utilities import exceptions
 from datetime import date
-from stationverification.utilities.plot_clock_offset import plot_clock_offset
+from stationverification.utilities.plot_timing_error import plot_timing_error
+from stationverification.utilities.handle_fortimus_soh_files \
+    import handle_fortimus_soh_files
 import logging
 from . import sohmetrics
+from . import fortimus_sohmetrics
+
 from configparser import ConfigParser
 from typing import Any
 
@@ -12,20 +16,55 @@ def add_soh_results_to_report(network: str,
                               location: Any,
                               startdate: date,
                               enddate: date,
-                              directory: str,
+                              soh_directory: str,
+                              miniseed_directory: str,
                               typeofinstrument: str,
                               json_dict: dict,
                               thresholds: ConfigParser):
+    if typeofinstrument.lower() == "titansma":
+        json_dict = handle_nanometrics_soh_results(network=network,
+                                                   station=station,
+                                                   location=location,
+                                                   startdate=startdate,
+                                                   enddate=enddate,
+                                                   soh_directory=soh_directory,
+                                                   json_dict=json_dict,
+                                                   thresholds=thresholds)
+    elif typeofinstrument.lower() == "fortimus":
+        json_dict =\
+            handle_fortimus_soh_results(network=network,
+                                        station=station,
+                                        location=location,
+                                        startdate=startdate,
+                                        enddate=enddate,
+                                        soh_directory=soh_directory,
+                                        miniseed_directory=miniseed_directory,
+                                        json_dict=json_dict,
+                                        thresholds=thresholds)
+    return json_dict
+
+
+def handle_nanometrics_soh_results(
+    network: str,
+    station: str,
+    location: Any,
+    startdate: date,
+    enddate: date,
+    soh_directory: str,
+    json_dict: dict,
+    thresholds: ConfigParser
+) -> dict:
     clock_locked_data = None
     clock_offset_data = None
     try:
-        clock_offset_sohfiles = sohmetrics.getsohfiles(network=network,
-                                                       station=station,
-                                                       location=location,
-                                                       startdate=startdate,
-                                                       enddate=enddate,
-                                                       channel="LCE",
-                                                       directory=directory)
+        clock_offset_sohfiles = \
+            sohmetrics.getsohfiles(network=network,
+                                   station=station,
+                                   location=location,
+                                   startdate=startdate,
+                                   enddate=enddate,
+                                   channel="LCE",
+                                   soh_directory=soh_directory)
         clock_offset_merged_streams =\
             sohmetrics.get_list_of_streams_from_list_of_files(
                 clock_offset_sohfiles)
@@ -57,7 +96,7 @@ def add_soh_results_to_report(network: str,
                                    startdate=startdate,
                                    enddate=enddate,
                                    channel="GST",
-                                   directory=directory)
+                                   soh_directory=soh_directory)
         check_clock_locked_merged_streams =\
             sohmetrics.get_list_of_streams_from_list_of_files(
                 check_clock_locked_sohfiles)
@@ -82,7 +121,7 @@ def add_soh_results_to_report(network: str,
         logging.warning(
             'GST data does not exist. Skipping clock locked metric.')
     if clock_locked_data is not None and clock_offset_data is not None:
-        plot_clock_offset(network=network,
+        plot_timing_error(network=network,
                           station=station,
                           startdate=startdate,
                           enddate=enddate,
@@ -93,13 +132,14 @@ def add_soh_results_to_report(network: str,
                           )
 
     try:
-        timing_quality_sohfiles = sohmetrics.getsohfiles(network=network,
-                                                         station=station,
-                                                         location=location,
-                                                         startdate=startdate,
-                                                         enddate=enddate,
-                                                         channel="LCQ",
-                                                         directory=directory)
+        timing_quality_sohfiles = \
+            sohmetrics.getsohfiles(network=network,
+                                   station=station,
+                                   location=location,
+                                   startdate=startdate,
+                                   enddate=enddate,
+                                   channel="LCQ",
+                                   soh_directory=soh_directory)
         timing_quality_merged_streams =\
             sohmetrics.get_list_of_streams_from_list_of_files(
                 timing_quality_sohfiles)
@@ -134,7 +174,7 @@ def add_soh_results_to_report(network: str,
                                    startdate=startdate,
                                    enddate=enddate,
                                    channel="GNS",
-                                   directory=directory)
+                                   soh_directory=soh_directory)
         check_number_of_satellites_merged_streams =\
             sohmetrics.get_list_of_streams_from_list_of_files(
                 check_number_of_satellites_sohfiles)
@@ -157,4 +197,45 @@ def add_soh_results_to_report(network: str,
         logging.error(e)
         logging.warning(
             'GNS data does not exist. Skipping number of satellites metric.')
+    return json_dict
+
+
+def handle_fortimus_soh_results(
+    network: str,
+    station: str,
+    location: Any,
+    startdate: date,
+    enddate: date,
+    soh_directory: str,
+    miniseed_directory: str,
+    json_dict: dict,
+    thresholds: ConfigParser
+) -> dict:
+    fortimus_soh_files = \
+        fortimus_sohmetrics.get_fortimus_soh_files(network=network,
+                                                   station=station,
+                                                   location=location,
+                                                   startdate=startdate,
+                                                   enddate=enddate,
+                                                   soh_directory=soh_directory)
+    fortimus_soh_metrics_list \
+        = handle_fortimus_soh_files(fortimus_soh_files=fortimus_soh_files,
+                                    station=station,
+                                    location=location)
+
+    json_dict = fortimus_sohmetrics.add_fortimus_soh_metric_results_to_json(
+        soh_data=fortimus_soh_metrics_list,
+        json_dict=json_dict,
+        thresholds=thresholds)
+
+    json_dict = fortimus_sohmetrics.handle_fortimus_soh_miniseed_metrics(
+        network=network,
+        station=station,
+        startdate=startdate,
+        enddate=enddate,
+        miniseed_directory=miniseed_directory,
+        location=location,
+        json_dict=json_dict
+    )
+
     return json_dict

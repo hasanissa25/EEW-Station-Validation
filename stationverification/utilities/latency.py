@@ -24,7 +24,8 @@ def latencyreport(
     Parameters
     ----------
     typeofinstrument: str
-        The instrument type that we are fetching data from: "APOLLO" / "GURALP"
+        The instrument type that we are fetching data from: "fortimus" \
+            / "titansma"
     network: str
         The network code for the station
     station: str

@@ -59,6 +59,10 @@ class ReportParameters(dict):
     def soharchive(self) -> list:
         return self["soharchive"]
 
+    @property
+    def miniseed_directory(self) -> list:
+        return self["miniseed_directory"]
+
 
 @pytest.fixture(scope="session")
 def gather_stats_parameters() -> GatherStatsParameters:
@@ -74,12 +78,13 @@ def gather_stats_parameters() -> GatherStatsParameters:
 def report_parameters() -> ReportParameters:
     thresholds = ConfigParser()
     thresholds.read("stationverification/data/config.ini")
-    return ReportParameters(typeofinstrument="APOLLO",
+    return ReportParameters(typeofinstrument="titansma",
                             network="QW",
                             station="QCC02",
                             startdate=date(2022, 4, 1),
                             enddate=date(2022, 4, 2),
                             latencyFiles="tests/latency/test_data/apollo/archive/latency",
                             soharchive="tests/data/apollo/archive/soh",
-                            thresholds=thresholds
+                            thresholds=thresholds,
+                            miniseed_directory="tests/data/apollo/archive/miniseed"
                             )

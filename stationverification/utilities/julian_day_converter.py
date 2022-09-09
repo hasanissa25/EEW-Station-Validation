@@ -59,9 +59,9 @@ def datetime_to_year_and_julian_day(
     else:
         julian_day_with_added_zeroes = f"{julian_day}"
     # Splitting it up as the Apollo file names might be different than Guralp
-    if instrumentType == "APOLLO":
+    if instrumentType.lower() == "titansma":
         formated_julian_day = f'{date.year}.{julian_day_with_added_zeroes}'
-    elif instrumentType == "GURALP":
+    elif instrumentType.lower() == "fortimus":
         formated_julian_day = f'{date.year}_{julian_day_with_added_zeroes}'
     return formated_julian_day
 

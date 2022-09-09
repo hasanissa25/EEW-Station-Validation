@@ -45,10 +45,6 @@ default ispaq config file.
                         To which bucket to upload in S3
     -B S3PATHTOSAVETO, --s3bucketpathtosaveto S3PATHTOSAVETO
                         Which 'directory' in S3 to save to
-    -c STATIONCONFIG, --stationconfig STATIONCONFIG
-                        Path to the file that contains station information.
-
-
 Functions:
 ----------
 main()
@@ -119,7 +115,7 @@ def main():
             user_inputs.station,
             user_inputs.location,
             user_inputs.station_url,
-            user_inputs.stationconf,
+            # user_inputs.stationconf,
         ))
     process_two.start()
     latency_results = queue.get()
@@ -131,14 +127,11 @@ def main():
     logging.info("Finished Process 2: Generating ISPAQ results")
 
     # Read the files generated from ISPAQ and populate the dictionary object
-    if user_inputs.stationconf is None:
-        if user_inputs.location is None:
-            snlc = f'{user_inputs.network}.{user_inputs.station}.x.Hxx'
-        else:
-            snlc = f'{user_inputs.network}.\
-{user_inputs.station}.{user_inputs.location}.Hxx'
+    if user_inputs.location is None:
+        snlc = f'{user_inputs.network}.{user_inputs.station}.x.Hxx'
     else:
-        snlc = f'{user_inputs.station}'
+        snlc = f'{user_inputs.network}.\
+{user_inputs.station}.{user_inputs.location}.Hxx'
 
     stationMetricData = gather_stats(
         snlc=snlc,
@@ -186,6 +179,8 @@ def main():
         end=user_inputs.enddate,
         thresholds=user_inputs.thresholds,
         soharchive=user_inputs.soharchive,
+        miniseed_directory=user_inputs.miniseedarchive
+
     )
 
     # Delete temporary files and links and package the output in a tarball

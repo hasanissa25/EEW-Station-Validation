@@ -40,7 +40,7 @@ def get_latencies(
     array_of_daily_latency_objects_max_latency_only: List[Any] = []
     array_of_daily_latency_objects_all_latencies: List[Any] = []
 
-    if typeofinstrument == "APOLLO":
+    if typeofinstrument.lower() == "titansma":
         list_of_latencies_for_all_days,\
             array_of_daily_latency_objects_max_latency_only, \
             array_of_daily_latency_objects_all_latencies =\
@@ -49,7 +49,7 @@ def get_latencies(
                 network=network,
                 station=station)
 
-    elif typeofinstrument == "GURALP":
+    elif typeofinstrument.lower() == "fortimus":
         list_of_latencies_for_all_days, \
             array_of_daily_latency_objects_all_latencies =\
             get_latencies_from_guralp(

@@ -46,7 +46,7 @@ class LatencyParameters(dict):
 
 @pytest.fixture(scope="session")
 def latency_parameters_nanometrics() -> LatencyParameters:
-    return LatencyParameters(type_of_instrument="APOLLO",
+    return LatencyParameters(type_of_instrument="titansma",
                              network="QW",
                              station="QCC02",
                              startdate=date(2022, 4, 1),
@@ -64,7 +64,7 @@ def latency_parameters_nanometrics() -> LatencyParameters:
 
 @pytest.fixture(scope="session")
 def latency_parameters_nanometrics_timely_availability() -> LatencyParameters:
-    return LatencyParameters(type_of_instrument="APOLLO",
+    return LatencyParameters(type_of_instrument="titansma",
                              network="QW",
                              station="QCC02",
                              startdate=date(2022, 4, 1),
@@ -82,7 +82,7 @@ def latency_parameters_nanometrics_timely_availability() -> LatencyParameters:
 
 @pytest.fixture(scope="session")
 def latency_parameters_nanometrics_no_files() -> LatencyParameters:
-    return LatencyParameters(type_of_instrument="APOLLO",
+    return LatencyParameters(type_of_instrument="titansma",
                              network="QW",
                              station="QCC02",
                              startdate=date(2022, 4, 1),
@@ -100,7 +100,7 @@ def latency_parameters_nanometrics_no_files() -> LatencyParameters:
 
 @pytest.fixture(scope="session")
 def latency_parameters_nanometrics_missing_files() -> LatencyParameters:
-    return LatencyParameters(type_of_instrument="APOLLO",
+    return LatencyParameters(type_of_instrument="titansma",
                              network="QW",
                              station="QCC02",
                              startdate=date(2022, 4, 1),
@@ -118,7 +118,7 @@ def latency_parameters_nanometrics_missing_files() -> LatencyParameters:
 
 @ pytest.fixture(scope="session")
 def latency_parameters_guralp() -> LatencyParameters:
-    return LatencyParameters(type_of_instrument="GURALP",
+    return LatencyParameters(type_of_instrument="fortimus",
                              network="QW",
                              station="QCN08",
                              startdate=date(2022, 3, 1),

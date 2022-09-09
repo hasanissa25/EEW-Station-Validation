@@ -33,7 +33,8 @@ def test_report(gather_stats_parameters, report_parameters):
            start=report_parameters.startdate,
            end=report_parameters.enddate,
            thresholds=report_parameters.thresholds,
-           soharchive=report_parameters.soharchive)
+           soharchive=report_parameters.soharchive,
+           miniseed_directory=report_parameters.miniseed_directory)
 
     json_report = "stationvalidation_output/QW.QCC02...2022-04-01.validation_results.json"
     json_report_path = Path(json_report)

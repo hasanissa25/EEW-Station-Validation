@@ -38,17 +38,17 @@ def test_datetime_to_year_and_julian_day(test_date_1_digit: date,
                                          test_date_3_digits: date
                                          ):
     assert datetime_to_year_and_julian_day(
-        test_date_1_digit, "APOLLO") == "2022.009"
+        test_date_1_digit, "titansma") == "2022.009"
     assert datetime_to_year_and_julian_day(
-        test_date_2_digits, "APOLLO") == "2022.024"
+        test_date_2_digits, "titansma") == "2022.024"
     assert datetime_to_year_and_julian_day(
-        test_date_3_digits, "APOLLO") == "2022.114"
+        test_date_3_digits, "titansma") == "2022.114"
     assert datetime_to_year_and_julian_day(
-        test_date_1_digit, "GURALP") == "2022_009"
+        test_date_1_digit, "fortimus") == "2022_009"
     assert datetime_to_year_and_julian_day(
-        test_date_2_digits, "GURALP") == "2022_024"
+        test_date_2_digits, "fortimus") == "2022_024"
     assert datetime_to_year_and_julian_day(
-        test_date_3_digits, "GURALP") == "2022_114"
+        test_date_3_digits, "fortimus") == "2022_114"
 
 
 def test_datestring_to_julian_day():

@@ -9,20 +9,20 @@ import requests
 # ISPAQ
 ispaqloc = "../../ISPAQ/ispaq/run_ispaq.py"
 pfile = 'stationverification/data/eew_preferences.txt'
-metrics = "eew_test"
+metrics = "sampleRates"
 pdfinterval = "aggregated"
 
 # Station XML for QW
-url = 'http://fdsn.seismo.nrcan.gc.ca/fdsnws/station/1/query?network=QW&level=channel&nodata=404'  # noqa
-request = requests.get(url, allow_redirects=True)
-open('stationverification/data/QW.xml', 'wb').write(request.content)
-station_url = "station#verification/data/QW.xml"
+# url = 'http://fdsn.seismo.nrcan.gc.ca/fdsnws/station/1/query?network=QW&level=response&nodata=404'  # noqa
+# request = requests.get(url, allow_redirects=True)
+# open('stationverification/data/new-QW.xml', 'wb').write(request.content)
+station_url = "/nrn/home/NRN/haissa/workspace/station-validation-project/station-validation/stationverification/data/QW-new.xml"
 
 # Apollo
-station = "QW.BCV11.*.H??"
-startdate = date(2022, 6, 1)
-enddate = date(2022, 6, 2)
-miniseedarchive = "tests/data/apolloLocation/archive/miniseed"
+station = "QW.QCC02.*.H??"
+startdate = date(2022, 8, 1)
+enddate = date(2022, 8, 3)
+miniseedarchive = "/nrn/home/NRN/haissa/workspace/station-validation-project/station-validation/backupData/apolloLocation/archive/miniseed"
 
 # Guralp
 # station = "QW.QCN08.00.H??"

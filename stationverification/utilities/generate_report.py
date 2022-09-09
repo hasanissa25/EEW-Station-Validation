@@ -329,6 +329,7 @@ def report(
     end: date,
     thresholds: ConfigParser,
     soharchive: str,
+    miniseed_directory: str,
     location: Optional[str] = None,
 ) -> dict:
     '''
@@ -433,7 +434,8 @@ def report(
                                   location=location,
                                   startdate=start,
                                   enddate=end,
-                                  directory=soharchive,
+                                  soh_directory=soharchive,
+                                  miniseed_directory=miniseed_directory,
                                   typeofinstrument=typeofinstrument,
                                   json_dict=json_dict,
                                   thresholds=thresholds)

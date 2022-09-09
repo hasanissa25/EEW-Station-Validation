@@ -1,5 +1,7 @@
 import requests
 import argparse
+import os
+
 from datetime import timedelta
 from dateutil import parser as dateparser  # type: ignore
 
@@ -39,13 +41,14 @@ def main():
     start_date = user_input.startdate
     network = user_input.network
 
+    if not os.path.isfile("stationverification/data/QW.xml"):
+        open('stationverification/data/QW.xml', 'wb')
     if start_date is None:
         station_url = f"http://fdsn.seismo.nrcan.gc.ca/fdsnws/station/1/query?network={network}&level=response&nodata=404"  # noqa
     else:
         start_date_as_date = (dateparser.parse(
             start_date, yearfirst=True)).date() - timedelta(days=1)
-        station_url = f"http://fdsn.seismo.nrcan.gc.ca/fdsnws/station/1/query?startafter={start_date_as_date}&network={network}&nodata=404"  # noqa
-
+        station_url = f"http://fdsn.seismo.nrcan.gc.ca/fdsnws/station/1/query/network={network}&level=response&nodata=404&startafter={start_date_as_date}"  # noqa
     request = requests.get(station_url, allow_redirects=True)
     request.raise_for_status()
     open('stationverification/data/QW.xml', 'wb').write(request.content)

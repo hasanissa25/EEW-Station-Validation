@@ -81,7 +81,7 @@ def latency_log_plot(
     ax1.set_xlabel('Latency (seconds)', fontsize=13)
     ax1.set_ylabel('Occurrences', fontsize=13)  # Add a y-label to the axes.
     ax1.set_yscale('log')
-    if typeofinstrument == "APOLLO":
+    if typeofinstrument.lower() == "titansma":
         average_latency = statistics.mean(latencies)
         latencies_as_float64 = np.array(latencies, dtype='float64')
         std_of_latency = np.std(latencies_as_float64)
@@ -89,7 +89,7 @@ def latency_log_plot(
 Data availability: {total_availability}%\n\
 Average latency:{round(np.float64(average_latency), 2)} seconds\n\
 Standard deviation: {round(np.float64(std_of_latency), 1)}'
-    elif typeofinstrument == "GURALP":
+    elif typeofinstrument.lower() == "fortimus":
         note_content = f'Type of Instrument: Fortimus\n\
 Average latency:{round(latencies.data_latency.mean(),2)} seconds\n\
 Standard deviation: {round(np.std(latencies.data_latency),1)}'
@@ -101,7 +101,8 @@ Standard deviation: {round(np.std(latencies.data_latency),1)}'
     plt.grid(visible=True, which='both', axis='both', linewidth=0.5)
 
     ax1.hist(
-        latencies if typeofinstrument == "APOLLO" else latencies.data_latency,
+        latencies if typeofinstrument.lower() == "titansma"
+        else latencies.data_latency,
         bins=[0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5,
               5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10],
         ec='black',
@@ -114,7 +115,6 @@ Standard deviation: {round(np.std(latencies.data_latency),1)}'
 {timely_threshold} seconds")
     legend = ax1.legend(bbox_to_anchor=(1.1, 1),
                         loc='upper right', fontsize="13")
-    plt.show()
 
     fig.tight_layout()  # Important for the plot labels to not overlap
     if not os.path.isdir('./stationvalidation_output/'):

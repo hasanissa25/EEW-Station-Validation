@@ -15,7 +15,7 @@ def test_latency_from_CSV(typeofinstrument: str,
     combined_latency_dataframe_for_all_days = pd.DataFrame(
         {'network': [], 'station': [], 'channel': [], "startTime": [], 'data_latency': []})
     array_of_daily_latency_dataframes = []
-    if typeofinstrument == "GURALP":
+    if typeofinstrument.lower() == "fortimus":
         for file in files:
             # current_day_latency_data = {}
             current_file_dataframe = pd.read_csv(file)

@@ -19,7 +19,7 @@ def test_getsohfiles(sohcriteria: dict):
         channel=sohcriteria["channel"],
         startdate=sohcriteria["startdate"],
         enddate=sohcriteria["enddate"],
-        directory=sohcriteria["directory"])
+        soh_directory=sohcriteria["directory"])
     assert testresults_files_found == [
         'tests/data/apollo/archive/soh/2022/04/01/QW.QCC02..LCQ.2022.091']
 
@@ -29,7 +29,7 @@ def test_getsohfiles(sohcriteria: dict):
         channel=sohcriteria["channel"],
         startdate=sohcriteria["startdate"],
         enddate=sohcriteria["enddate"],
-        directory=sohcriteria["directory"])
+        soh_directory=sohcriteria["directory"])
     assert testresults_files_not_found == []
 
 

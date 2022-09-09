@@ -52,11 +52,11 @@ def get_latency_files(
     # list of the associated files
     while iterdate < enddate:
         logging.debug(f'Looking for files for date {iterdate}')
-        if typeofinstrument == "APOLLO":
+        if typeofinstrument.lower() == "titansma":
             cmd = f'ls {path}/{iterdate.strftime("%Y/%m/%d")}/\
 {network}.{station}.\
 {datetime_to_year_and_julian_day(iterdate, typeofinstrument)}.json 2>/dev/null'
-        elif typeofinstrument == "GURALP":
+        elif typeofinstrument.lower() == "fortimus":
             cmd = f'ls {path}/{iterdate.strftime("%Y/%m/%d")}/{network}_\
 {station}_*_*_\
 {datetime_to_year_and_julian_day(iterdate, typeofinstrument)}.csv \

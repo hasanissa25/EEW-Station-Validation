@@ -45,7 +45,7 @@ def getsohfiles(
         channel: str,
         startdate: date,
         enddate: date,
-        directory: str,
+        soh_directory: str,
         location: Any = None) -> List[str]:
     '''
     Retrieves a list of the daily SOH channel files for the specified SOH
@@ -63,8 +63,8 @@ def getsohfiles(
         The first day to search for files for
     enddate: date
         The end date for the search, non-inclusive
-    directory: str
-        The directory where the miniseed archive should be found
+    soh_directory: str
+        The directory where the soh archive should be found
 
     Returns
     -------
@@ -83,7 +83,7 @@ def getsohfiles(
         # Get the julian day and convert it to a 3 digit string
         jday = "%03d" % iterdate.timetuple().tm_yday
         # Search for the file for the specific day
-        command = f'ls {directory}/{iterdate.strftime("%Y/%m/%d")}/{snlc}\
+        command = f'ls {soh_directory}/{iterdate.strftime("%Y/%m/%d")}/{snlc}\
 .{iterdate.year}.{jday} 2>/dev/null'
         logging.debug(command)
         output = subprocess.getoutput(command)

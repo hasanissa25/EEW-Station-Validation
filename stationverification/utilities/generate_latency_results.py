@@ -54,7 +54,7 @@ def generate_latency_results(typeofinstrument: str,
                 enddate=enddate)
         # Produce latency plots
         total_availability = None
-        if typeofinstrument == "APOLLO":
+        if typeofinstrument.lower() == "titansma":
             logging.info("Calculating total availability..")
             total_availability = calculate_total_availability_for_nanometrics(
                 files)
@@ -70,7 +70,7 @@ def generate_latency_results(typeofinstrument: str,
             combined_latency_dataframe_for_all_days = \
                 generate_combined_latency_dataframe_for_all_days(
                     list_of_latencies_for_all_days=array_of_daily_latency_dataframes_all_latencies)  # noqa
-        elif typeofinstrument == "GURALP":
+        elif typeofinstrument.lower() == "fortimus":
             array_of_daily_latency_dataframes_max_latency_only = \
                 array_of_daily_latency_objects_all_latencies
             array_of_daily_latency_dataframes_all_latencies = \
