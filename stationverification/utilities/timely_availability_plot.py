@@ -116,7 +116,7 @@ def timely_availability_plot(
         axes[0].yaxis.set_major_locator(loc)
 
         # Plotting the data
-        y_axis = [a*(b/100) for a, b in
+        y_axis = [float(round(a*(b/100), 2)) for a, b in
                   zip(HNN_timely_availability_percentage_array,
                       percent_availability_array_HNN_rounded)]
 
@@ -147,7 +147,7 @@ def timely_availability_plot(
         axes[1].yaxis.set_major_formatter(ticker.PercentFormatter(xmax=100))
         loc = plticker.MultipleLocator(base=10)
         axes[1].yaxis.set_major_locator(loc)
-        y_axis = [a*(b/100) for a, b in
+        y_axis = [float(round(a*(b/100), 2)) for a, b in
                   zip(HNE_timely_availability_percentage_array,
                       percent_availability_array_HNE_rounded)]
         if len(number_of_days_as_array) == len(y_axis) and \
@@ -173,7 +173,7 @@ def timely_availability_plot(
         axes[2].yaxis.set_major_formatter(ticker.PercentFormatter(xmax=100))
         loc = plticker.MultipleLocator(base=10)
         axes[2].yaxis.set_major_locator(loc)
-        y_axis = [a*(b/100) for a, b in
+        y_axis = [float(round(a*(b/100), 2)) for a, b in
                   zip(HNZ_timely_availability_percentage_array,
                       percent_availability_array_HNZ_rounded)]
         if len(number_of_days_as_array) == len(y_axis) and \

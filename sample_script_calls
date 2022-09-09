@@ -20,19 +20,19 @@ Parameters:
 Sample Calls:
 
 stationverification script:
-    time nohup stationverification -T APOLLO -N QW -S QCC02 -L 00 -d 2022-7-1 -e 2022-7-2  >> logs/QCC02_log.out &
+    time nohup stationverification -N QW -S QCC02 -L 00 -d 2022-7-1 -e 2022-7-2  >> logs/QCC02_log.out &
 
 latency script:
-    time nohup stationverificationlatency -T APOLLO -N QW -S BCL01 -d 2022-6-25 -e 2022-7-5  >> logs/BCL01-Latency_log &
+    time nohup stationverificationlatency -N QW -S BCL01 -d 2022-6-25 -e 2022-7-5  >> logs/BCL01-Latency_log &
 
 stationverification script with stationXML, and overwritting default archive directories:
-    time nohup stationverification -T APOLLO -N QW -S QCC01 -L 00 -d 2022-4-21 -e 2022-5-1 -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -s /home/ec2-user/station-validation/stationverification/data/QW.xml -o /validation >> logs/QCC01_log.out &
+    time nohup stationverification -N QW -S QCC01 -L 00 -d 2022-4-21 -e 2022-5-1 -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -s /home/ec2-user/station-validation/stationverification/data/QW.xml -o /validation >> logs/QCC01_log.out &
 
 stationverification script with station config file, and overwritting default archive directories:
-    time nohup stationverification -T APOLLO -N QW -S QCC02 -L 00 -d 2022-3-28 -e 2022-3-29 -c /home/ec2-user/station-validation/tests/data/stationQCC02.conf -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -o /validation >> logs/QCC02_log.out &
+    time nohup stationverification -N QW -S QCC02 -L 00 -d 2022-3-28 -e 2022-3-29 -c /home/ec2-user/station-validation/tests/data/stationQCC02.conf -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -o /validation >> logs/QCC02_log.out &
 
 latency script, and overwritting default archive directories:
-    time nohup stationverificationlatency -T APOLLO -N QW -S BCL25 -d 2022-4-21 -e 2022-4-22 -l /apollo/archive/latency -o /validation >> logs/BCL25_log.out &
+    time nohup stationverificationlatency -N QW -S BCL25 -d 2022-4-21 -e 2022-4-22 -l /apollo/archive/latency -o /validation >> logs/BCL25_log.out &
 
 
 
