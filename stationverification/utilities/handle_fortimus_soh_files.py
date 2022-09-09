@@ -35,7 +35,8 @@ def fortimus_soh_file_to_string_format(
     for line in content.split(split_by):
         response.append((line[46:-8]))
 
-    final_formatted_response = b''.join(response).decode('utf-8')
+    final_formatted_response = b''.join(
+        response).decode('utf-8', errors="ignore")
 
     return final_formatted_response
 
