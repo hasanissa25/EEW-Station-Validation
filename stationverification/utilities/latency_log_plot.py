@@ -91,7 +91,7 @@ Average latency:{round(np.float64(average_latency), 2)} seconds\n\
 Standard deviation: {round(np.float64(std_of_latency), 1)}'
     elif typeofinstrument.lower() == "fortimus":
         note_content = f'Type of Instrument: Fortimus\n\
-Average latency:{round(latencies.data_latency.mean(),2)} seconds\n\
+Average latency: {round(latencies.data_latency.mean(),2)} seconds\n\
 Standard deviation: {round(np.std(latencies.data_latency),1)}'
 
     ax1.text(0.9, 0.8, note_content, style='italic', fontsize=12,
