@@ -23,6 +23,10 @@ class UserInput(dict):
     def webServer(self) -> str:
         return self["webServer"]
 
+    @property
+    def typeofinstrument(self) -> str:
+        return self["typeofinstrument"]
+
 
 def upload_report_fetch_arguments() -> UserInput:
     argsparser = argparse.ArgumentParser()
@@ -59,6 +63,13 @@ Ex: "http://3.96.234.48:18010/QW/ONE01/2022-04-21-2022-05-01/"',
         type=str,
         required=True
     )
+    argsparser.add_argument(
+        "-T",
+        "--typeofinstrument",
+        help='Type of instrument. Either Fortimus, or Nanometrics',
+        type=str,
+        required=True
+    )
     args = argsparser.parse_args()
     default_parameters = get_default_parameters()
 
@@ -71,9 +82,12 @@ Ex: "http://3.96.234.48:18010/QW/ONE01/2022-04-21-2022-05-01/"',
     #     else default_parameters.WEB_SERVER
     webServer = args.webServer
     wikiTitle = args.wikiTitle
+    typeofinstrument = args.typeofinstrument.lower()
+
     return UserInput(gitlabUrl=gitlabUrl,
                      projectId=projectId,
                      projectToken=projectToken,
                      webServer=webServer,
-                     wikiTitle=wikiTitle
+                     wikiTitle=wikiTitle,
+                     typeofinstrument=typeofinstrument
                      )

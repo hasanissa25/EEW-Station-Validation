@@ -52,5 +52,6 @@ def main():
     else:
         content = generate_markdown_template_for_full_validation(
             attachments=attachments,
-            json_report=GitLabWikisObj.validation_json)
+            json_report=GitLabWikisObj.validation_json,
+            typeofinstrument=user_input.typeofinstrument)
     GitLabWikisObj._post_wiki_api(content=content)

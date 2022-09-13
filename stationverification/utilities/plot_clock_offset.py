@@ -63,7 +63,7 @@ def create_line_plot(stream: obspy.Stream,
     offsets = (abs((trace.data * 24.112654) / 1000))
 
     # Setting up the figure
-    fig = plt.figure()
+    fig = plt.figure(figsize=(18.5, 10.5))
     axes = fig.add_subplot(1, 1, 1)
     axes.plot(trace.times("matplotlib"), offsets, "b-")
     plt.title(
@@ -92,11 +92,11 @@ def create_line_plot(stream: obspy.Stream,
 {clock_offset_threshold_in_microseconds} microseconds')
     # Adding a legend
     legend = axes.legend(bbox_to_anchor=(1, 1),
-                         loc='upper right')
+                         loc='upper right', fontsize="9")
     if not os.path.isdir("./stationvalidation_output"):
         os.mkdir('./stationvalidation_output')
     plt.savefig(
-        f'stationvalidation_output/{filename}.clock_offset.png',
+        f'stationvalidation_output/{filename}.clock_offset_line_plot.png',
         dpi=300, bbox_extra_artists=(legend,), bbox_inches='tight')
     plt.close()
 
@@ -129,7 +129,7 @@ def create_bar_graph(list_of_streams: np.ndarray,
     else:
         filename = f'{snlc}.{startdate}_\
 {enddate - timedelta(days=1)}.clock_offset_log_plot.png'
-        plottitle = f'Clock Offset log plot for  {network}.{station} \n {startdate} to\
+        plottitle = f'Clock Offset log plot for {network}.{station} \n {startdate} to\
  {enddate - timedelta(days=1)}'
 
     # Setting up the figure
@@ -140,10 +140,9 @@ def create_bar_graph(list_of_streams: np.ndarray,
     ax1.set_title(plottitle)  # Add a title to the axes.
     ax1.set_xlabel('Clock Offset (microseconds)', fontsize=13)
     ax1.set_ylabel('Occurrences', fontsize=13)  # Add a y-label to the axes.
-    ax1.set_yscale('log')
-
     ax1.set_axisbelow(True)
     plt.grid(visible=True, which='both', axis='both', linewidth=0.5)
+    ax1.set_yscale('log')
 
     # Adding the threshold line
     threshold = clock_offset_threshold_in_microseconds

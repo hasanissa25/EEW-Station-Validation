@@ -68,6 +68,14 @@ class Attachments(dict):
     def pdf(self) -> List[Any]:
         return self["pdf"]
 
+    @property
+    def clock_offset_line_plot(self) -> List[Any]:
+        return self["clock_offset_line_plot"]
+
+    @property
+    def clock_offset_log_plot(self) -> List[Any]:
+        return self["clock_offset_log_plot"]
+
 
 class GitLabAttachments(dict):
     '''
@@ -101,7 +109,9 @@ class GitLabAttachments(dict):
             "pct_below_nlnm": [],
             "percent_availability": [],
             "spikes": [],
-            "pdf": []}
+            "pdf": [],
+            "clock_offset_line_plot": [],
+            "clock_offset_log_plot": []}
         for attachment in self.list_of_attachments:
             if "failed_latencies" in attachment["file_name"]:
                 attachments["failed_latencies"].append(
@@ -165,6 +175,14 @@ class GitLabAttachments(dict):
                      "link": attachment["link"]["markdown"]})
             elif "pdf" in attachment["file_name"]:
                 attachments["pdf"].append(
+                    {"name": attachment["file_name"],
+                     "link": attachment["link"]["markdown"]})
+            elif "clock_offset_line_plot" in attachment["file_name"]:
+                attachments["clock_offset_line_plot"].append(
+                    {"name": attachment["file_name"],
+                     "link": attachment["link"]["markdown"]})
+            elif "clock_offset_log_plot" in attachment["file_name"]:
+                attachments["clock_offset_log_plot"].append(
                     {"name": attachment["file_name"],
                      "link": attachment["link"]["markdown"]})
         return Attachments(attachments)
