@@ -36,8 +36,6 @@ default ispaq config file.
     -p PDFINTERVAL, --pdfinterval PDFINTERVAL
                         time span for PDFs - daily and/or aggregated over the \
                             entire span
-    -T TYPEOFINSTRUMENT, --typeofinstrument TYPEOFINSTRUMENT
-                        type of instrument used, APOLLO or GURALP
     -U UPLOADTOS3, --uploadresultstos3 UPLOADTOS3
                         Whether or not to upload results to the S3 bucket.\
                             True or False

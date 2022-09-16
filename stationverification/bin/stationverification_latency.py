@@ -22,8 +22,6 @@ optional arguments:
                         thresholds to test the metrics against.
     -l LatencyDirectory, --latency LatencyDirectory
                         The directory containing latency files
-    -T TYPEOFINSTRUMENT, --typeofinstrument TYPEOFINSTRUMENT
-                        type of instrument used, APOLLO or GURALP
     -U UPLOADTOS3, --uploadresultstos3 UPLOADTOS3
                         Whether or not to upload results to the S3 bucket.\
  True or False
