@@ -8,6 +8,7 @@ from typing import Any, List
 from . import sohmetrics
 from stationverification.utilities import exceptions
 from stationverification.utilities.plot_clock_offset import plot_clock_offset
+from stationverification.utilities.plot_DAC_voltage import plot_DAC_voltage
 
 
 class FortmisMetricResults(dict):
@@ -142,6 +143,23 @@ def handle_fortimus_soh_miniseed_metrics(
         logging.error(e)
         logging.warning(
             'LEO data does not exist. Skipping clock offset metric.')
+    try:
+        DAC_voltage_sohfiles = \
+            sohmetrics.getsohfiles(network=network,
+                                   station=station,
+                                   location=location,
+                                   startdate=startdate,
+                                   enddate=enddate,
+                                   channel="LED",
+                                   soh_directory=miniseed_directory)
+        DAC_voltage_merged_streams =\
+            sohmetrics.get_list_of_streams_from_list_of_files(
+                DAC_voltage_sohfiles)
+        plot_DAC_voltage(list_of_streams=DAC_voltage_merged_streams)
+    except exceptions.StreamError as e:
+        logging.error(e)
+        logging.warning(
+            'LED data does not exist. Skipping DAC Voltage Plot.')
     return json_dict
 
 

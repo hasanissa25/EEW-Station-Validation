@@ -166,6 +166,11 @@ def generate_markdown_template_for_full_validation(attachments: Attachments,
  {{ element["link"] }}
 {% endfor %}
 </details>
+<details><summary>DAC Voltage plot</summary>
+{% for element in dac_voltage_plot -%}
+ {{ element["link"] }}
+{% endfor %}
+</details>
 ''')
     empty_fields_dictionary = get_empty_fields(json_report)
     template_render = full_validation_template.render(
@@ -193,6 +198,7 @@ def generate_markdown_template_for_full_validation(attachments: Attachments,
         clock_offset_line_plot=attachments.clock_offset_line_plot,
         clock_offset_log_plot=attachments.clock_offset_log_plot,
 
+        dac_voltage_plot=attachments.dac_voltage_plot,
 
     )
     return template_render

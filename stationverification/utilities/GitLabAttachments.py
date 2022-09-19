@@ -76,6 +76,10 @@ class Attachments(dict):
     def clock_offset_log_plot(self) -> List[Any]:
         return self["clock_offset_log_plot"]
 
+    @property
+    def dac_voltage_plot(self) -> List[Any]:
+        return self["dac_voltage_plot"]
+
 
 class GitLabAttachments(dict):
     '''
@@ -111,7 +115,8 @@ class GitLabAttachments(dict):
             "spikes": [],
             "pdf": [],
             "clock_offset_line_plot": [],
-            "clock_offset_log_plot": []}
+            "clock_offset_log_plot": [],
+            "dac_voltage_plot": []}
         for attachment in self.list_of_attachments:
             if "failed_latencies" in attachment["file_name"]:
                 attachments["failed_latencies"].append(
@@ -183,6 +188,10 @@ class GitLabAttachments(dict):
                      "link": attachment["link"]["markdown"]})
             elif "clock_offset_log_plot" in attachment["file_name"]:
                 attachments["clock_offset_log_plot"].append(
+                    {"name": attachment["file_name"],
+                     "link": attachment["link"]["markdown"]})
+            elif "dac_voltage_plot" in attachment["file_name"]:
+                attachments["dac_voltage_plot"].append(
                     {"name": attachment["file_name"],
                      "link": attachment["link"]["markdown"]})
         return Attachments(attachments)
