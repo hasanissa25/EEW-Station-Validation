@@ -1,208 +1,439 @@
-# Station Verification of Data Quality with Ispaq
-This program is designed to run IRIS's System for Portable Assessment of Quality (ISPAQ) to gather statistics about data quality new Stations for the Earthquake Early Warning system.
+# Running Station Validation Script
+<b>Assumptions</b>: The user has access to the AWS EC2 instance, and is logged in as the <b>ec2-user on the AWS validation instance</b>
+
+<b>Instructions</b>:
+While logged into the EC2 instance as the ec2-user and is on the AWS validation instance: 
+
+-  `cd /home/ec2-user/EEW-Station-Validation`
+-  `source venv/bin/activate`
+-  `nohup stationverification {Parameters} >> logs/{name of the log file}.out &`
+
+-  <details><summary>Parameters</summary>
+      
+      `N: The network code, Example: QW`
+
+      `S: The station code, Example: QCC01`
+
+      `L: The location code, Example: 00`
+
+      `d: Start date, YYYY-M-D; Example: 2022-3-9`
+
+      `e: End date, EXCLUSIVE YYYY-M-D; for a one day validation period, the end date should be startdate + 1. Example: 2022-3-15`
+
+      `o: Output directory. Example: "/validation"`
+
+      `s: Station xml location, if using a file instead of FDSN, Example: '/home/ec2-user/station-validation/stationverification/data/QW.xml`
+
+      `m: Miniseed files archive location, Example: '/apollo/archive/miniseed/'`
+
+      `l: Latency files arhcive location, Example: '/apollo/archive/latency'`
+
+      `i: ISPAQ executable location, Example: '/home/ec2-user/ispaq/run_ispaq.py'`
+
+      `H: State of health files arhcive location, Example: '/apollo/archive/soh/'`
+
+      `U: Whether or not to upload results to S3 bucket, Example: True or False`
+
+      `c: Station configuration file, if no stationXML is available, Example: /home/ec2-user/station-validation/tests/data`
+</details> 
 
 
-Note: ispaq can be very resource intensive. During testing with a 6 channel station over a 10 day period, it was observed to use almost 2 GB of RAM. If ispaq seems to end abruptly without any visible error, it may have been stopped by oom_killer.
+-  <details><summary>Sample calls</summary>
+    <br/>
+    <b>Station Verification script:</b> 
 
-# Install Instructions for Centos 7/8
-First you must install ispaq as a package.
+    Running the script for one day (2022-7-1): `time nohup stationverification -N QW -S QCC02 -L 00 -d 2022-7-1 -e 2022-7-2  >> logs/QCC02_log.out &`
 
-Install the required packages with Yum.
+    Running the script for 10 days (2022-7-1 To 2022-7-11): `time nohup stationverification -N QW -S QCC02 -L 00 -d 2022-7-1 -e 2022-7-11  >> logs/QCC02_log.out &`
 
-```
-    sudo yum install -y epel-release
-
-    sudo yum install -y python3 python3-pip git
-```
-
-For Centos 8 only, some of the rependancy packages for R are missing from the yum repository, so install using dnf.
-
-```
-    sudo dnf --enablerepo=powertools install openblas-devel
+    <b>Latency script:</b>
     
-    sudo dnf --enablerepo=powertools install texinfo-tex
-```
+    `time nohup stationverificationlatency -N QW -S BCL01 -d 2022-6-25 -e 2022-7-5  >> logs/BCL01-Latency_log &`
 
-Install the rest of the required packages
+    <b>Station Verification script with Station XML, and over-writing default archive directories:</b>
+    
+    `time nohup stationverification -N QW -S QCC01 -L 00 -d 2022-4-21 -e 2022-5-1 -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -s /home/ec2-user/station-validation/stationverification/data/QW.xml -o /validation >> logs/QCC01_log.out &`
 
-```
-    sudo yum install -y python3-devel libcurl-devel libxml2-devel R
-```
+    <b>Station Verification script with station Config file, and over-writing default archive directories:</b>
+    
+    `time nohup stationverification -N QW -S QCC02 -L 00 -d 2022-3-28 -e 2022-3-29 -c /home/ec2-user/station-validation/tests/data/stationQCC02.conf -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -o /validation >> logs/QCC02_log.out &`
 
-Clone custom version of ISPAQ from Bitbucket. This version of ISPAQ has modifications to allow it to function more effectively in the Verification Facility. For a list of changes, read the Customizations section in the [README](http://bitbucket.seismo.nrcan.gc.ca/users/jgosset/repos/ispaq/browse/README.md) file.
+    <b>Latency script, and over-writing default archive directories:</b>
+    
+    `time nohup stationverificationlatency -N QW -S BCL25 -d 2022-4-21 -e 2022-4-22 -l /apollo/archive/latency -o /validation >> logs/BCL25_log.out &</details>`
 
-```
-    mkdir ispaq
 
-    git clone http://bitbucket.seismo.nrcan.gc.ca/scm/~jgosset/ispaq.git
-```
 
-Install required python packages with pip. 
 
-```
-    pip3 install numpy==1.19.5 pandas==0.25.3 obspy==1.2.2 rpy2==3.1.0 --user
-```
 
-Install ispaq 
 
-```
-    pip3 install ./ispaq/ --user
+<h1>Uploading Results to GitLab (NRCan network, not on AWS)</h1>
 
-    ispaq -I
-```
-If prompted to create a user namespace: yes
+<b>Assumptions</b>:
+- The user has cloned the GitLab repository (http://gitlab.seismo.nrcan.gc.ca/eew/station-validation.git) and installed it.
 
-Once ISPAQ is installed, the Station Verification package can be downloaded, configured and installed.
+- The results are on 3.96.234.48:18010, which the user can not access while being on the VPN. This can be solved by port forwarding.
 
-```
-    mkdir stationverification
+- The URL provided to the upload script should be in the following template:
+   - `https://3.96.234.48:18010/json/QW/{station}/{date}/`
 
-    git clone http://bitbucket.seismo.nrcan.gc.ca/users/jgosset/repos/station-validation
-```
-Default config files will be located in the package at ./stationverification/data and can be modified pre-installation, or copies can be made to override the default. Configuration files will be covered in the next section.
+<b>Sample Call:</b>
 
-Once any required configuration is complete, install the package.
-```
-    pip3 install ./station_validation
-```
+    cd station-validation
 
-# Configuration
-Within ./stationverification/data there is a few default config files that can be modified before install or used as templates for config files to be used at runtime.
+    pip3 install .
 
-### eew_preferences.txt
-The preference file used by ISPAQ. The file is self-documenting, and additional information can be found in the ISPAQ [README](http://bitbucket.seismo.nrcan.gc.ca/users/jgosset/repos/ispaq/browse/README.md) file. An instance of this file is configured automatically at run time. The only option that should be changed would be the list of metrics in the line starting with 'eew_test'.
+    uploadreport -t "QW BCH14 2022-07-16 To 2022-07-26" -w "https://3.96.234.48:18010/json/QW/BCH14/2022-07-16-2022-07-26/" -I Fortimus
 
-### config.ini
-This file contains preferences for the stationverification cmdline tools. The first section in this file, [thresholds], contains the thresholds for the possible metrics that the script can check. The comments in the file describe the specific scope of each threshold.
+     t: Title of the wiki page
+     w: The link to the webserver containing the results.
+     I: The type of instrument. Nanometrics or Fortimus
 
-The second section of this file, [nagios], describes preferences for the cmdline tool _pushtonagios_ which is used to push results to a Nagios Server's nrdp API to populate. The preferences in this section include __nagios__, the url for the Nagios NRDP api, __token__, the API token to send with the push request, and __metrics__, a list of metrics for which to try and push results to Nagios.
+<h1>Updating Station XML (NRCan network, not on AWS)</h1>
 
-### stationTXX6.conf
-This is a sample Station Config file. When running the _stationverification_ cmdline tool, a station config file must be used to generate station Metadata and response information for ISPAQ. The sample included contains metadata for test station TXX6, and must be modified for the intended station.
+<b>Assumptions</b>: The user has cloned the GitHub repository 
+(https://github.com/hasanissa25/EEW-Station-Validation.git) and installed it.
+    
+    cd station-validation
 
-The main section of this file is the [metadata] section, which contains network and stations codes, coordinates, install date and a list of channels the station has. This information is used to determine the target station for populate a temporary station xml file for ISPAQ to use.
+    pip3 install .
 
-There should also be an additional section for each channel in the list from the previous section. For each, the sample rate is required, as well as one of two options for instrument response. The first option is to specify the [NRL](https://docs.obspy.org/master/packages/obspy.clients.nrl.html) __sensor_keys__ and __datalogger_keys__. These keys are used to retrieve response information from the Nominal Response Library. The keys represent the configuration of the datalogger and instrument used for the specific channel, and the order of the keys and what they represent can differ from device to device. To determine the keys for a device it's recommended to explore the [NRL](http://ds.iris.edu/NRL/) archive. The second option for instruments that don't have response information in the NRL is to specify a __response_path__. Instruments like the Guralp Fortimus allow you to download the response file directly from the device itself, and this should be the absolute path to the specific RESP file corresponding to the channel.
-If using the --FDSNWS option to use an FDSN Web Service for metadata, the channel-specific sections are not required. 
+    fetchStationXml -n QW -s 2018-1-1
+ 
+     n: The network code
+     s: The start date of the station. If left empty, all starting dates will be queried 
+</details>
 
-# Usage
+- The user then needs to commit the station XML file back to the GitHub Repository. (https://github.com/hasanissa25/EEW-Station-Validation.git)
 
-This package contained three command line tools that are described here.
+- While logged into the EC2 instance as the ec2-user and is on the AWS validation instance: 
 
-## stationverification
-```
-usage: stationverification [-h] -c STATIONCONFIG -d STARTDATE -e ENDDATE
-                           [-i ISPAQLOCATION] [-M METRICS]
-                           [-P PREFERENCE_FILE] [-L LOGFILE] [-v]
-                           [-t THRESHOLDS] [-l HDF5] [-f FDSNWS]
-                           [-o OUTPUTDIR]
+   - `cd /home/ec2-user/EEW-Station-Validation`
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -c STATIONCONFIG, --stationconfig STATIONCONFIG
-                        Path to the file that contains station information.
-  -d STARTDATE, --startdate STARTDATE
-                        The first date of the verification period. Must be in
-                        YYYY-MM-DD format
-  -e ENDDATE, --enddate ENDDATE
-                        The end of the verification period. Data will be
-                        tested for each day from the start date up to but not
-                        including the end date. Must be in YYYY-MM-DD format.
-  -i ISPAQLOCATION, --ispaqlocation ISPAQLOCATION
-                        Specifies the path or alias for the ispaq cmdline
-                        tool. Default: ispaq
-  -M METRICS, --metrics METRICS
-                        Select the group of metrics from the ispaq preference
-                        file to run with. Default: eew_test
-  -P PREFERENCE_FILE, --preference_file PREFERENCE_FILE
-                        Overrides the default ispaq config file.
-  -L LOGFILE, --logfile LOGFILE
-                        To log to a file instead of stdout, specify the
-                        filename.
-  -v, --verbose         Sets logging level to DEBUG.
-  -t THRESHOLDS, --thresholds THRESHOLDS
-                        Overrides the default config file.
-  -l HDF5, --HDF5 HDF5  The directory containing HDF5 sniffwave archive.
-                        Default: /data/sniffwave
-  -f FDSNWS, --fdsnws FDSNWS
-                        FDSN webservice URL to use. If not specified, then
-                        --stationconfig must be specified to generate station
-                        metadata for Ispaq
-  -o OUTPUTDIR, --outputdir OUTPUTDIR
-                        Output directory to store results in. If none is
-                        specified, the current directory is used.
-```
-Typical usage with only the required arguments might look something like
-```
-stationverification -d 2021-07-10 -e 2021-07-12 -c ../stationTXX6.conf
-```
-Dates should be in the YYYY-MM-DD format.
+   - `git pull`
+  
+   - `source venv/bin/activate`
 
-Ispaq will generate metrics for dates up to but not including the end date.
-Latency metrics are generated from HDF5 files created by the [pysniffwave](http://bitbucket.seismo.nrcan.gc.ca/projects/EEW/repos/pysniffwave/browse) utility, and SOH metrics are generated by reading the miniseed files representing the SOH channels.
+   - `pip3 install .`
 
-Once metrics are generated from ispaq, the results will be parsed and compared to the configured thresholds. The results are packaged in JSON format, which is stored in a tarball with the generated PSD plots under the name NETWORK.STATION_STARDATE-ENDATE_validation.tgz.
+# Reading Station Validation Results
 
-## dailyverification
+<details><summary>JSON Report</summary>
+<br/>
+<details><summary>Metrics</summary>
+Each Metric has three key value pairs
 
-```
-usage: dailyverification [-h] [-i ISPAQLOCATION] [-P PREFERENCE_FILE]
-                         [-L LOGFILE] [-v] [-t THRESHOLDS] [-l HDF5]
-                         [-a ARCHIVE] [-f FDSNWS] [-o OUTPUTDIRECTORY]
+- Passed: True or False
+  - Whether the list of Values has passed our validation test through the comparison of each value with the predefined thresholds
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -i ISPAQLOCATION, --ispaqlocation ISPAQLOCATION
-                        If ispaq is not installed as a package, specify the
-                        location of run_ispaq.py Default: ispaq
-  -P PREFERENCE_FILE, --preference_file PREFERENCE_FILE
-                        Declare what ISPAQ preference file to use when running
-                        ISPAQ. Default is eew_preferences.txt. Default:
-                        /home/jgosset/.local/lib/python3.7/site-
-                        packages/stationverification/data/eew_preferences.txt
-  -L LOGFILE, --logfile LOGFILE
-                        To log to a file instead of stdout, specify the
-                        filename.
-  -v, --verbose         Sets logging level to DEBUG
-  -t THRESHOLDS, --thresholds THRESHOLDS
-                        The path to the preference file containing the
-                        thresholds to test the metrics against. Default:
-                        /home/jgosset/.local/lib/python3.7/site-
-                        packages/stationverification/data/config.ini
-  -l HDF5, --HDF5 HDF5  The directory containing HDF5 sniffwave files.
-                        Default: /data/sniffwave
-  -a ARCHIVE, --archive ARCHIVE
-                        The path to the miniseed archive. Default:
-                        /data/miniseed
-  -f FDSNWS, --fdsnws FDSNWS
-                        Specity a FDSNWS to use for waveform data instead of a
-                        miniseed archive.
-  -o OUTPUTDIRECTORY, --outputdirectory OUTPUTDIRECTORY
-                        The directory to archive daily verification reports.
-                        Default: ./dailyverification
-```
-This specialized tool will do a one-day verification for the previous day on every station in the archive. The purpose of these daily verifications is so that the results can be pushed to nagios to be used as services. It uses a dummy stationxml file for metadata that should allow for any station in the XX, CN or QW network, so no station config files are required to generate metadata. It only performs checks of basic stats so no response information is required. A json will be generated for each station and stored in the outputdirectory, in a year/month/day supdirectory structure.
+- Details: 
+  
+  - Empty if Passed is True, or the specific reason the validation failed if Passed is False
 
-## pushtonagios
-```
-usage: pushtonagios [-h] [-a ARCHIVEPATH] [-n NAGIOSURL] [-t TOKEN]
-                    [-c NAGIOS_CONFIG]
+- Values :
+  
+  - The result of the metric for each day in the validation period
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -a ARCHIVEPATH, --archivepath ARCHIVEPATH
-                        The path to the archived verification reports.
-  -n NAGIOSURL, --nagiosurl NAGIOSURL
-                        Overrides the default URL for the Nagios nrdp server
-                        to push results to. Defaults are stored in config.ini
-  -t TOKEN, --token TOKEN
-                        Overrides the Nagios API token in config.ini.
-  -c NAGIOS_CONFIG, --nagios_config NAGIOS_CONFIG
-                        Override the default config file.
-```
-This tool pushes the results of the previous day's __dailyverification__. It uses code from the [seismic-digitizer-soh](http://bitbucket.seismo.nrcan.gc.ca/projects/NAG/repos/seismic-digitizer-soh/browse) package to interface with Nagios. The code was copied to stationverification/nagios so that that package would not be a requirement for this one.
-This tool should be set up along side the __dailyverification__ tool as cron jobs.
-```
-* 1 * * * /home/jgosset/.local/bin/dailyverification -o /data/dailyverifications/
-* 2 * * * /home/jgosset/.local/bin/pushtonagios -a /data/dailyverifications/
-```
+</details>
+
+<details><summary>Channel Metrics</summary>
+
+- Each Channel (HNN, HNE, HNZ) has a list of metrics that are being validated, and a Latency object
+
+- As of June 2022, the list includes:
+  - Number of gaps, Max gap, Number of overlaps, Max Overlaps, Spikes, Calibration Signal
+  - Percent Below New Noise Model, Percent Above New High Noise Model, Percent availability, 
+  - Latency object which contains Average latency, and Timely availability.
+ 
+    - Average latency:
+      - The average latency across the entire validation period for the specified channel
+    - Timely availability:
+      - The percentage of latency values that are below our threshold latency across the entire validation period for the specified channel
+
+
+</details>
+
+<details><summary>Station Metrics</summary>
+
+- Station Metrics are metrics that are channel independent
+- As of June 2022, the list includes:
+  - Station latency, Clock offset, Timing quality, Clock locked, and Satellites locked
+
+
+</details>
+</details>
+
+<details><summary>PDF Plot</summary>
+
+- Probability density function plots
+- As of June 2022, the X-axis is period in seconds.
+  - IRIS will be adding an option to allow for Frequency on the X-axis instead
+
+<details><summary>Passing</summary>
+![image](uploads/e4e0236c77c4232ba76317441232923a/image.png)</details>
+<details><summary>Failing</summary>
+![image](uploads/61a5ee7b1ce9829a9ddcc81cf2d3bc7a/image.png)
+![image](uploads/2642b9cda687898bbcef148a0ef55da8/image.png)</details>
+</details>
+
+<details><summary>Latency Log Plot</summary>
+
+- The latency log plot represents all the latency values for the entire validation period
+
+- The red vertical line represents the Data Timeliness threshold
+
+- The data on the left of the threshold is passing data
+
+- The data on the right of the threshold is failing data
+
+<details><summary>Passing</summary>
+![image](uploads/eeed83982d950de866c6db4285a93cfe/image.png)</details>
+<details><summary>Failing</summary>
+![image](uploads/3ba63fdff37b097439f4f380ca2e7584/image.png)</details>
+</details>
+
+<details><summary>Latency Line Plots</summary>
+
+- The Latency line plots are a daily representation of the latency values, for each day in the validation period.
+
+- The red horizontal line is the Data Timeliness Threshold
+
+- The data above the threshold is failing data.
+
+- The data below the threshold is passing data
+
+<details><summary>Passing</summary>
+![image](uploads/34f90711a7133fd1a5e9c3cb2cd779e6/image.png)</details>
+<details><summary>Failing</summary>
+![image](uploads/a3c1db285e163428c67fc587910f5ab6/image.png)</details>
+</details><details><summary>Timely Availability Plot</summary>
+
+- Timely Availability
+  - Percentage of latency values that are below our predefined threshold
+
+- Percent availability 
+  - The portion of data available for each day represented as a percentage
+<details><summary>Passing</summary>
+![image](uploads/7e423224379ae23e6da7324b5d128d1e/image.png)</details>
+<details><summary>Failing</summary>
+![image](uploads/f1a4a3edc4a7878a1768c16bbb73e59d/image.png)
+</details>
+</details>
+
+<details><summary>Timing Error Plot (Nanometric Stations)</summary>
+
+- This plot is a combination of the clock offset in microseconds and the clock status
+
+- When the clock is locked, if the clock offset value is above the positive red horizontal threshold line, or below the negative red horizontal threshold line then the data is failing.
+
+- If the clock is unlocked, or the clock is off, further investigation is required
+
+<details><summary>Timing Error Plot: Expected Behavior</summary>
+![image](uploads/8f797b29bb3c05c95f5df7d198ab8825/image.png)</details>
+<details><summary>Timing Error Plot: Requires Investigation</summary>
+![image](uploads/7d34d030caf0cc22587be75349b99c6e/image.png)</details>
+</details>
+
+<details><summary>Clock Offset Plot (Fortimus Stations)</summary>
+
+- This plot represents the clock offset in microseconds, for a single day
+
+- If the clock offset value is above the red horizontal threshold line, then the data is failing.
+
+<details><summary>Clock Offset Plot: Expected Behavior</summary>
+![image](uploads/122d21613b8453db52f6295152222336/image.png)</details>
+</details>
+
+
+<details><summary>Clock Offset Log Plot (Fortimus Stations)</summary>
+
+- This plot represents the clock offset in microseconds, for the duration of the validation period
+
+<details><summary>Clock Offset Log Plot: Expected Behavior</summary>
+![image](uploads/6f7b83c40b06f91516dfb1ad0a99a076/image.png)</details>
+</details>
+
+<details><summary>Timing Quality Plot</summary>
+
+- Average SEED timing quality value per day
+
+- The red horizontal line is the Timing Quality Threshold.
+
+- Daily values above the threshold are passing
+
+- Daily values below the threshold are failing
+
+<details><summary>Passing</summary>
+![image](uploads/5562f543745fb6eac2fe02229f00b495/image.png)</details>
+<details><summary>Failing</summary>
+![image](uploads/a45cae17542fc73aa9cc567812cd2eda/image.png)</details>
+</details>
+
+<details><summary>ADC Count Plot</summary>
+
+- The value in ADC counts of the accelerometer channel for N, E and Z respectively.
+
+<details><summary>Passing</summary>
+![image](uploads/de62e2d820aa9a30e8b6cf8397d21e38/image.png)
+</details>
+<details><summary>Failing</summary>
+![image](uploads/bfeea6d9f7b43c00728281f00877a440/image.png)
+</details>
+</details>
+
+<details><summary>Max Gaps Plot</summary>
+
+- Indicates the size of the largest gap in data encountered in each 24-hour window during the validation period
+
+<details><summary>Passing</summary>
+![image](uploads/5e414f501de1a6ca14a2caf18b90f8be/image.png)
+</details>
+<details><summary>Failing</summary>
+![image](uploads/3d86f4645da282933ad9ad4c658ae676/image.png)
+</details>
+</details>
+
+<details><summary>Number of Gaps Plot</summary>
+
+- Indicates the number of gaps in data encountered in each 24-hour window during the validation period
+
+<details><summary>Passing</summary>
+![image](uploads/0558b1616951ff1512002648a05a646f/image.png)
+</details>
+<details><summary>Failing</summary>
+![image](uploads/d7fc5e45a4a77e9473afaafd2d598dcb/image.png)</details>
+</details>
+
+<details><summary>Number of Overlaps Plot</summary>
+
+- This metric reports the number of overlaps encountered in each 24-hour window during the entire validation period
+
+<details><summary>Passing</summary>
+![image](uploads/412b40561d4b4256a68fdfbcc7c61dce/image.png)
+</details>
+<details><summary>Failing</summary>
+![image](uploads/1155644a7dc346515db1320701a0b650/image.png)
+</details>
+</details>
+
+<details><summary>Spikes Plot</summary>
+
+- This metric reports the number of times spikes were encountered in each 24-hour window during the entire validation period.
+
+- Spikes represent that the 'Spikes detected' bit in the 'dq_flags' byte was set within a miniSEED file. 
+
+- This data quality flag is set by some dataloggers in the fixed section of the miniSEED header when short-duration spikes have been detected in the data. 
+Because spikes have shorter duration than the natural period of most seismic sensors, spikes often indicate a problem introduced at or after the datalogger
+
+<details><summary>Passing</summary>
+![image](uploads/b00900f1a66ca357ed5f3504850dc186/image.png)
+</details>
+<details><summary>Failing</summary>
+![image](uploads/825631de9e43d31ca620b6f587519ab1/image.png)
+</details>
+</details>
+
+<details><summary>Percent above New High Noise Model Plot</summary>
+
+- Percentage of Probability Density Function values that are above the New High Noise Model. 
+
+- This value is calculated for each 24-hour window over the entire validation period.
+
+<details><summary>Passing</summary>
+![image](uploads/6367841b061db023d1257bbe0bd2633c/image.png)
+</details>
+<details><summary>Failing</summary>
+![image](uploads/69a64cb86adb299f34d78b8ebbb2deef/image.png)
+</details>
+</details>
+
+<details><summary>Percent Below New Low Noise Model Plot</summary>
+
+- Percentage of Probability Density Function values that are below the New Low Noise Model. 
+
+- This value is calculated for each 24-hour window over the entire validation period.
+
+<details><summary>Passing</summary>
+![image](uploads/e1edfc4899c3c5a8fe85530f76a8d0b7/image.png)
+</details>
+<details><summary>Failing</summary>
+![image](uploads/3991066968a193deb61f091a7f6c22b8/image.png)
+</details>
+</details>
+
+# Submitting tickets and viewing results
+
+<details><summary>Navigating to the Station-Validation GitLab project</summary>
+<br/>
+- Please follow this link to gain access to the project: http://gitlab.seismo.nrcan.gc.ca/eew/station-validation
+<br/>
+
+  - You will need to login to GitLab in order to gain access
+  
+  - If you have issues with permission, please contact me: Hasan.issa@nrcan.rncan.gc.ca 
+  
+  - If you successfully gained access to the link, you should find yourself at the following page:
+
+![image](uploads/7a7f4fbf8f76f3d02d0d891f6f595900/image.png)</details>
+
+<details><summary>Accessing Station Validation results</summary>
+
+- You can go directly to this link: http://gitlab.seismo.nrcan.gc.ca/eew/station-validation/-/wikis/home <br/>
+
+- Alternatively, click Wiki, from the left hand side
+<br/>
+![image](uploads/34a4de881f95aedbaf875f68aff2b1ab/image.png)
+<br/>
+- After clicking Wiki, you should find yourself at this page below: 
+<br/>
+![image](uploads/712d04d409b02f7fc37cd92b9ec1870d/image.png)
+- From the page above, make a selection from the right hand side menu, to specify the station.
+
+- Once inside the station wiki, you can then click any of the dropdown menus to view the results as shown below
+
+![image](uploads/76c22ebb3d64741fb6f000aa8cc17c6b/image.png)
+</details>
+
+<details><summary>Viewing current tickets</summary>
+
+– You can go directly to this link: http://gitlab.seismo.nrcan.gc.ca/eew/station-validation/-/issues
+
+– Alternatively, you can follow the steps below:
+
+– In order to view current tickets, highlight Issues on the left hand side, and click List
+
+![image](uploads/c31b77a74a05014d74d4782c0be9328c/image.png)
+– You will be redirected to the following page, with the list of the current opened tickets
+
+![image](uploads/9f1d9fbe5d0441648aac756dd754e457/image.png)
+</details>
+
+<details><summary>Creating Tickets</summary>
+
+- Go to: http://gitlab.seismo.nrcan.gc.ca/eew/station-validation/-/issues
+
+- Click “New issue”, on the top right
+
+![image](uploads/93c58d6827773faf5b81173cafcf9224/image.png)
+- After clicking “New issue”, you will be redirected to the New Issue section shown below
+
+![image](uploads/927f2981e0fd4c79d6b34ed1d3631988/image.png)
+- Enter the title of the ticket, with a brief description, then click Create issue, shown above
+
+- This will add the to the ticket to the list of issues: http://gitlab.seismo.nrcan.gc.ca/eew/station-validation/-/issues
+
+</details>
+
+<details><summary>Viewing Ticket board</summary>
+
+- You can directly to : http://gitlab.seismo.nrcan.gc.ca/eew/station-validation/-/boards
+
+- Alternatively, follow these steps:
+
+- Highlight Issues on the left hand side, and click Boards.
+
+![image](uploads/d5e8e5ea58b18eb22ef649807fb39ab9/image.png)
+- You should be able to see the Issue Boards with the open tickets, the ones in Development, and the ones that have already been closed.
+
+![image](uploads/851fc360b772f82cf05bd1e7aae922a4/image.png)
+</details>
