@@ -89,33 +89,6 @@ While logged into the EC2 instance as the ec2-user and is on the AWS validation 
      w: The link to the webserver containing the results.
      I: The type of instrument. Nanometrics or Fortimus
 
-<h1>Updating Station XML (NRCan network, not on AWS)</h1>
-
-<b>Assumptions</b>: The user has cloned the GitHub repository 
-(https://github.com/hasanissa25/EEW-Station-Validation.git) and installed it.
-    
-    cd station-validation
-
-    pip3 install .
-
-    fetchStationXml -n QW -s 2018-1-1
- 
-     n: The network code
-     s: The start date of the station. If left empty, all starting dates will be queried 
-</details>
-
-- The user then needs to commit the station XML file back to the GitHub Repository. (https://github.com/hasanissa25/EEW-Station-Validation.git)
-
-- While logged into the EC2 instance as the ec2-user and is on the AWS validation instance: 
-
-   - `cd /home/ec2-user/EEW-Station-Validation`
-
-   - `git pull`
-  
-   - `source venv/bin/activate`
-
-   - `pip3 install .`
-
 # Reading Station Validation Results
 
 <details><summary>JSON Report</summary>
