@@ -7,7 +7,7 @@ from stationverification.utilities.GitLabAttachments import Attachments
 def generate_markdown_template_for_full_validation(attachments: Attachments,
                                                    json_report: dict,
                                                    typeofinstrument: str) -> str:
-    if typeofinstrument == "nanometrics":
+    if typeofinstrument == "titansma":
         full_validation_template = Template('''
 <details><summary>JSON Report</summary>
 {% for element in validation_results -%}

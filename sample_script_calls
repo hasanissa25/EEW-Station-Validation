@@ -20,7 +20,7 @@ Parameters:
 Sample Calls:
 
 stationverification script:
-    time nohup stationverification -N QW -S BCH10 -L 00 -d 2022-9-9 -e 2022-9-12  >> logs/BCH10_log.out &
+    time nohup stationverification -N QW -S BCH10 -L 00 -d 2022-9-9 -e 2022-9-10  >> logs/BCH10_log.out &
 
 latency script:
     time nohup stationverificationlatency -N QW -S BCL01 -d 2022-6-25 -e 2022-7-5  >> logs/BCL01-Latency_log &
@@ -42,7 +42,7 @@ Run upload_report_to_gitlab script (Within CHIS Network):
 -w: The link to the webserver containing the documents to download. 
 -T: Type of instrument: Fortimus or Nanometrics 
     
-    uploadreport -t "QW QCC02 2022-09-9 To 2022-09-11" -w "https://3.96.234.48:18010/json/QW/QCC02/2022-09-09-2022-09-11/" -I nanometrics
+    uploadreport -t "QW BCH10 2022-09-9 To 2022-09-10" -w "https://3.96.234.48:18010/json/QW/BCH10/2022-09-09/" -I fortimus
 
 
 Run fetch_station_xml script (Within CHIS Network):

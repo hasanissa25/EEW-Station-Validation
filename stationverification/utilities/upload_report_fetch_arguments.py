@@ -66,7 +66,7 @@ Ex: "http://3.96.234.48:18010/QW/ONE01/2022-04-21-2022-05-01/"',
     argsparser.add_argument(
         "-I",
         "--typeofinstrument",
-        help='Type of instrument. Either Fortimus, or Nanometrics',
+        help='Type of instrument. Either fortimus, or titansma',
         type=str,
         required=True
     )
