@@ -41,7 +41,7 @@ def create_line_plot(stream: obspy.Stream):
     axes.tick_params(axis='x', labelrotation=90)
 
     # Formatting the Y axis
-    # axes.set_ylabel('Clock Offset (microseconds)')
+    axes.set_ylabel('Counts')
     # Adding a grid
     # axes.set_axisbelow(True)
     axes.grid(visible=True, which='both',
