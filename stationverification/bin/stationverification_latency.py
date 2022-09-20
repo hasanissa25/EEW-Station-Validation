@@ -45,6 +45,7 @@ from stationverification.utilities.generate_latency_results \
     import generate_latency_results
 from stationverification.utilities.upload_results_to_s3 import \
     upload_results_to_s3
+from stationverification.utilities.update_station_xml import update_station_xml
 
 
 def main():
@@ -60,6 +61,10 @@ def main():
         A Timely Availability Plot of the validation period
 
     '''
+
+    # Fetching the updated station xml for QW network
+
+    update_station_xml()
     user_inputs = fetch_arguments()
 
     generate_latency_results(typeofinstrument=user_inputs.typeofinstrument,

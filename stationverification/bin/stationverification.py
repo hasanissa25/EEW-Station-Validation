@@ -65,6 +65,7 @@ from stationverification.utilities.upload_results_to_s3 import \
     upload_results_to_s3
 from stationverification.utilities.timely_availability_plot import \
     timely_availability_plot
+from stationverification.utilities.update_station_xml import update_station_xml
 
 
 def main():
@@ -77,6 +78,10 @@ def main():
         A json file containing the results of the stationvalidation tests.
 
     '''
+    # Fetching the updated station xml for QW network
+
+    update_station_xml()
+
     # Setting up a queue for processors to push their results to if needed
     queue = Queue()
     user_inputs = fetch_arguments()
