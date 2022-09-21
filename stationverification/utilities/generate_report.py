@@ -375,7 +375,7 @@ def report(
     json_dict['network_code'] = network
     json_dict['station_code'] = station
     json_dict['start_date'] = start.strftime("%Y-%m-%d")
-    json_dict['end_date'] = end.strftime("%Y-%m-%d")
+    json_dict['end_date'] = (end - timedelta(days=1)).strftime("%Y-%m-%d")
     json_dict['channels'] = {}
 
     # Loop through each channel in the station
