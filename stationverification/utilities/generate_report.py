@@ -448,7 +448,7 @@ def report(
     if start == end - timedelta(days=1):
         filename = f'{snlc}.{start}.validation_results.json'
     else:
-        filename = f'{snlc}.{start}_{end}\
+        filename = f'{snlc}.{start}_{end - timedelta(days=1)}\
 .validation_results.json'
 
     # Write the json dictionary to a json file
