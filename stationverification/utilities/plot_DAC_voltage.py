@@ -47,12 +47,9 @@ def create_line_plot(stream: obspy.Stream):
     axes.grid(visible=True, which='both',
               axis='both', linewidth=0.5)
 
-    # Adding a legend
-    legend = axes.legend(bbox_to_anchor=(1, 1),
-                         loc='upper right', fontsize="9")
     if not os.path.isdir("./stationvalidation_output"):
         os.mkdir('./stationvalidation_output')
     plt.savefig(
         f'stationvalidation_output/{filename}.dac_voltage_plot.png',
-        dpi=300, bbox_extra_artists=(legend,), bbox_inches='tight')
+        dpi=300, bbox_inches='tight')
     plt.close()
