@@ -182,7 +182,7 @@ def ADC_plot(
         plt.xticks(rotation=90)
         plt.title(
             f'{snlc} - \
-ADC Count (range: [0, +/- 8,388,608])')
+ADC Count (range: [0, +/- 8,388,608])', pad=20)
         plt.ylabel('Amplitude value')
         ax.set_axisbelow(True)
         plt.grid(visible=True, which='both', axis='both', linewidth=0.5)
