@@ -92,7 +92,7 @@ def create_line_plot(stream: obspy.Stream,
 {clock_offset_threshold_in_microseconds} microseconds')
     # Adding a legend
     legend = axes.legend(bbox_to_anchor=(1, 1),
-                         loc='upper right', fontsize="9")
+                         loc='upper right', fontsize="18")
     if not os.path.isdir("./stationvalidation_output"):
         os.mkdir('./stationvalidation_output')
     plt.savefig(
@@ -150,7 +150,7 @@ def create_bar_graph(list_of_streams: np.ndarray,
                 label=f"Data Timeliness threshold: \
 {clock_offset_threshold_in_microseconds} seconds")
     legend = ax1.legend(bbox_to_anchor=(1.1, 1),
-                        loc='upper right', fontsize="13")
+                        loc='upper right', fontsize="18")
 
     fig.tight_layout()  # Important for the plot labels to not overlap
 
