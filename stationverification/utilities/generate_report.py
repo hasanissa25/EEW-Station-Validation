@@ -330,6 +330,7 @@ def report(
     thresholds: ConfigParser,
     soharchive: str,
     miniseed_directory: str,
+    timingSource: str,
     location: Optional[str] = None,
 ) -> dict:
     '''
@@ -375,7 +376,7 @@ def report(
     json_dict['network_code'] = network
     json_dict['station_code'] = station
     json_dict['start_date'] = start.strftime("%Y-%m-%d")
-    json_dict['end_date'] = end.strftime("%Y-%m-%d")
+    json_dict['end_date'] = (end - timedelta(days=1)).strftime("%Y-%m-%d")
     json_dict['channels'] = {}
 
     # Loop through each channel in the station
@@ -438,7 +439,8 @@ def report(
                                   miniseed_directory=miniseed_directory,
                                   typeofinstrument=typeofinstrument,
                                   json_dict=json_dict,
-                                  thresholds=thresholds)
+                                  thresholds=thresholds,
+                                  timingSource=timingSource)
     # Setup JSson report
     if location is None:
         snlc = f'{network}.{station}..'

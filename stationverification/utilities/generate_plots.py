@@ -182,7 +182,7 @@ def ADC_plot(
         plt.xticks(rotation=90)
         plt.title(
             f'{snlc} - \
-ADC Count (range: [0, +/- 8,388,608])')
+ADC Count (range: [0, +/- 8,388,608])', pad=20)
         plt.ylabel('Amplitude value')
         ax.set_axisbelow(True)
         plt.grid(visible=True, which='both', axis='both', linewidth=0.5)
@@ -233,10 +233,12 @@ def num_overlaps_plot(
     size_of_x_axis = x_axis.size
     size_of_metric_data = len(stationMetricData.get_values(
         'num_overlaps', network, station, channel))
+    y_axis = stationMetricData.get_values(
+        'num_overlaps', network, station, channel)
+    y_axis_rounded = list(map(lambda value: float(round(value, 2)), y_axis))
     if size_of_metric_data == size_of_x_axis:
         bars = ax.bar(
-            x_axis, stationMetricData.get_values(
-                'num_overlaps', network, station, channel), 0.1)
+            x_axis, y_axis_rounded, 0.1)
         ax.bar_label(bars)
         # Function for formatting the x values to actually be dates
 
@@ -313,10 +315,12 @@ def num_gaps_plot(
     size_of_x_axis = x_axis.size
     size_of_metric_data = len(stationMetricData.get_values(
         'num_gaps', network, station, channel))
+    y_axis = stationMetricData.get_values(
+        'num_gaps', network, station, channel)
+    y_axis_rounded = list(map(lambda value: float(round(value, 2)), y_axis))
     if size_of_metric_data == size_of_x_axis:
         bars = ax.bar(
-            x_axis, stationMetricData.get_values(
-                'num_gaps', network, station, channel), 0.1)
+            x_axis, y_axis_rounded, 0.1)
         ax.bar_label(bars)
 
         # Function for formatting the x values to actually be dates
@@ -391,10 +395,13 @@ def max_gap_plot(
     size_of_x_axis = x_axis.size
     size_of_metric_data = len(stationMetricData.get_values(
         'max_gap', network, station, channel))
+    y_axis = stationMetricData.get_values(
+        'max_gap', network, station, channel)
+    y_axis_rounded = list(map(lambda value: float(round(value, 1)), y_axis))
+
     if size_of_metric_data == size_of_x_axis:
         bars = ax.bar(
-            x_axis, stationMetricData.get_values(
-                'max_gap', network, station, channel), 0.1)
+            x_axis, y_axis_rounded, 0.1)
         # Function for formatting the x values to actually be dates
         ax.bar_label(bars)
 
@@ -469,10 +476,13 @@ def spikes_plot(
     size_of_x_axis = x_axis.size
     size_of_metric_data = len(stationMetricData.get_values(
         'spikes', network, station, channel))
+    y_axis = stationMetricData.get_values(
+        'spikes', network, station, channel)
+    y_axis_rounded = list(map(lambda value: float(round(value, 1)), y_axis))
+
     if size_of_metric_data == size_of_x_axis:
         bars = ax.bar(
-            x_axis, stationMetricData.get_values(
-                'spikes', network, station, channel), 0.1)
+            x_axis, y_axis_rounded, 0.1)
         ax.bar_label(bars)
 
         ax.axhline(spikes_threshold, color='r', linewidth="2",

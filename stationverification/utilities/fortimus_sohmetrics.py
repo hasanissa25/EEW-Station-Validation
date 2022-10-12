@@ -86,6 +86,7 @@ def handle_fortimus_soh_miniseed_metrics(
         enddate: date,
         miniseed_directory: str,
         json_dict: dict,
+        timingSource: str,
         location: Any = None) -> dict:
     '''
     Retrieves a list of the daily SOH channel files for the specified SOH
@@ -116,7 +117,7 @@ def handle_fortimus_soh_miniseed_metrics(
                                    location=location,
                                    startdate=startdate,
                                    enddate=enddate,
-                                   channel="LEO",
+                                   channel="LEO" if timingSource.lower() == "gnss" else "LEP",  # noqa
                                    soh_directory=miniseed_directory)
         clock_offset_merged_streams =\
             sohmetrics.get_list_of_streams_from_list_of_files(

@@ -20,7 +20,8 @@ def add_soh_results_to_report(network: str,
                               miniseed_directory: str,
                               typeofinstrument: str,
                               json_dict: dict,
-                              thresholds: ConfigParser):
+                              thresholds: ConfigParser,
+                              timingSource: str):
     if typeofinstrument.lower() == "titansma":
         json_dict = handle_nanometrics_soh_results(network=network,
                                                    station=station,
@@ -40,7 +41,8 @@ def add_soh_results_to_report(network: str,
                                         soh_directory=soh_directory,
                                         miniseed_directory=miniseed_directory,
                                         json_dict=json_dict,
-                                        thresholds=thresholds)
+                                        thresholds=thresholds,
+                                        timingSource=timingSource)
     return json_dict
 
 
@@ -209,7 +211,8 @@ def handle_fortimus_soh_results(
     soh_directory: str,
     miniseed_directory: str,
     json_dict: dict,
-    thresholds: ConfigParser
+    thresholds: ConfigParser,
+    timingSource: str
 ) -> dict:
     fortimus_soh_files = \
         fortimus_sohmetrics.get_fortimus_soh_files(network=network,
@@ -235,7 +238,8 @@ def handle_fortimus_soh_results(
         enddate=enddate,
         miniseed_directory=miniseed_directory,
         location=location,
-        json_dict=json_dict
+        json_dict=json_dict,
+        timingSource=timingSource
     )
 
     return json_dict

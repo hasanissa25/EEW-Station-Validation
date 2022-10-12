@@ -198,9 +198,9 @@ def timely_availability_plot(
         legend = axes[0].legend(bbox_to_anchor=(1.1, 1),
                                 loc='upper right', fontsize="10")
         legend = axes[1].legend(bbox_to_anchor=(1.1, 1),
-                                loc='upper right')
+                                loc='upper right', fontsize="10")
         legend = axes[2].legend(bbox_to_anchor=(1.1, 1),
-                                loc='upper right')
+                                loc='upper right', fontsize="10")
         fig.tight_layout()  # Important for the plot labels to not overlap
         if not os.path.isdir('./stationvalidation_output/'):
             os.mkdir('./stationvalidation_output/')
