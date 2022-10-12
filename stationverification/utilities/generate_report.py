@@ -330,6 +330,7 @@ def report(
     thresholds: ConfigParser,
     soharchive: str,
     miniseed_directory: str,
+    timingSource: str,
     location: Optional[str] = None,
 ) -> dict:
     '''
@@ -438,7 +439,8 @@ def report(
                                   miniseed_directory=miniseed_directory,
                                   typeofinstrument=typeofinstrument,
                                   json_dict=json_dict,
-                                  thresholds=thresholds)
+                                  thresholds=thresholds,
+                                  timingSource=timingSource)
     # Setup JSson report
     if location is None:
         snlc = f'{network}.{station}..'

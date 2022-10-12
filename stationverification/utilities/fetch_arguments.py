@@ -25,72 +25,76 @@ class UserInput(dict):
         return self["location"]
 
     @property
-    def startdate(self) -> list:
+    def startdate(self) -> str:
         return self["startdate"]
 
     @property
-    def enddate(self) -> list:
+    def enddate(self) -> str:
         return self["enddate"]
 
     @property
-    def ispaqloc(self) -> list:
+    def ispaqloc(self) -> str:
         return self["ispaqloc"]
 
     @property
-    def metrics(self) -> list:
+    def metrics(self) -> str:
         return self["metrics"]
 
     @property
-    def pfile(self) -> list:
+    def pfile(self) -> str:
         return self["pfile"]
 
     @property
-    def thresholds(self) -> list:
+    def thresholds(self) -> str:
         return self["thresholds"]
 
     @property
-    def latencyFiles(self) -> list:
+    def latencyFiles(self) -> str:
         return self["latencyFiles"]
 
     @property
-    def pdfinterval(self) -> list:
+    def pdfinterval(self) -> str:
         return self["pdfinterval"]
 
     @property
-    def station_url(self) -> list:
+    def station_url(self) -> str:
         return self["station_url"]
 
     @property
-    def typeofinstrument(self) -> list:
+    def typeofinstrument(self) -> str:
         return self["typeofinstrument"]
 
     @property
-    def miniseedarchive(self) -> list:
+    def miniseedarchive(self) -> str:
         return self["miniseedarchive"]
 
     @property
-    def soharchive(self) -> list:
+    def soharchive(self) -> str:
         return self["soharchive"]
 
     @property
-    def outputdir(self) -> list:
+    def outputdir(self) -> str:
         return self["outputdir"]
 
     @property
-    def uploadresultstos3(self) -> list:
+    def uploadresultstos3(self) -> str:
         return self["uploadresultstos3"]
 
     @property
-    def bucketName(self) -> list:
+    def bucketName(self) -> str:
         return self["bucketName"]
 
     @property
-    def s3directory(self) -> list:
+    def s3directory(self) -> str:
         return self["s3directory"]
 
     # @property
     # def stationconf(self) -> list:
     #     return self["stationconf"]
+
+    @property
+    def timingSource(self) -> str:
+        return self["timingSource"]
 
 
 def fetch_arguments() -> UserInput:
@@ -224,6 +228,13 @@ span',
         help='Overrides the default config file.',
         type=str
     )
+    argsparser.add_argument(
+        '-T',
+        '--timingSource',
+        help='Timing source for Fortimus instruments. Either GNSS or PTP.\
+Defaults to GNSS',
+        type=str
+    )
     # argsparser.add_argument(
     #     '-T',
     #     '--typeofinstrument',
@@ -295,6 +306,8 @@ span',
         else default_parameters.PDF_INTERVAL
     bucketName = args.s3bucketname if args.s3bucketname is not None\
         else default_parameters.S3_BUCKET_NAME
+    timingSource = args.timingSource if args.timingSource is not None\
+        else default_parameters.TIMING_SOURCE
 
     # Optional parameters, with no default value
     uploadresultstos3 = args.uploadresultstos3
@@ -326,5 +339,6 @@ the enddate to the day after the startdate')
                      uploadresultstos3=uploadresultstos3,
                      bucketName=bucketName,
                      s3directory=s3directory,
+                     timingSource=timingSource
                      #  stationconf=stationconf
                      )

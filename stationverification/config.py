@@ -24,7 +24,7 @@ class BaseAppSettings(BaseSettings):
     S3_BUCKET_NAME: str = "eew-validation-data"
     S3_DIRECTORY: str = "validation_results"
     OUTPUT_DIRECTORY: str = "/validation"
-
+    TIMING_SOURCE: str = "GNSS"
     # Default Config Files
 
     STATION_URL: str = "stationverification/data/QW.xml"

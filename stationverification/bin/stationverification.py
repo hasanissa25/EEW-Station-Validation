@@ -182,7 +182,8 @@ def main():
         end=user_inputs.enddate,
         thresholds=user_inputs.thresholds,
         soharchive=user_inputs.soharchive,
-        miniseed_directory=user_inputs.miniseedarchive
+        miniseed_directory=user_inputs.miniseedarchive,
+        timingSource=user_inputs.timingSource
 
     )
 
