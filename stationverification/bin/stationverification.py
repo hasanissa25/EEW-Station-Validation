@@ -79,8 +79,11 @@ def main():
 
     '''
     # Fetching the updated station xml for QW network
-
-    update_station_xml()
+    try:
+        update_station_xml()
+    except Exception as err:
+        logging.error("Could not establish a connection to the FDSN")
+        raise err
 
     # Setting up a queue for processors to push their results to if needed
     queue = Queue()
