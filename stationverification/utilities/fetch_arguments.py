@@ -258,7 +258,8 @@ Defaults to GNSS',
         '--updateStationXml',
         help='True, or False. If set to True, an updated station xml will be \
 fetched from the FDSN. Defaults to False',
-        type=bool
+        type=bool,
+        default=False
     )
     args = argsparser.parse_args()
     default_parameters = get_default_parameters()
@@ -318,7 +319,7 @@ fetched from the FDSN. Defaults to False',
         else default_parameters.S3_BUCKET_NAME
     timingSource = args.timingSource if args.timingSource is not None\
         else default_parameters.TIMING_SOURCE
-    updateStationXml = args.updateStationXml if args.updateStationXml is not None else False  # noqa
+    updateStationXml = args.updateStationXml
 
     # Optional parameters, with no default value
     uploadresultstos3 = args.uploadresultstos3
