@@ -16,6 +16,7 @@ Parameters:
 -H: State of health files arhcive location, Example: '/apollo/archive/soh/'
 -U: Whether or not to upload results to S3 bucket, Example: True or False
 -c: Station configuration file, if no stationXML is available, Example: /home/ec2-user/station-validation/tests/data
+-u: Fetch an updated station xml from the FDSN . Defaults to False. Example: True or False
 
 Sample Calls:
 
