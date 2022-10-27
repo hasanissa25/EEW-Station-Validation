@@ -96,6 +96,10 @@ class UserInput(dict):
     def timingSource(self) -> str:
         return self["timingSource"]
 
+    @property
+    def updateStationXml(self) -> bool:
+        return self["updateStationXml"]
+
 
 def fetch_arguments() -> UserInput:
     # Create argparse object to handle user arguments
@@ -136,14 +140,14 @@ YYYY-MM-DD format.",
         type=str,
         required=True
     )
-    argsparser.add_argument(
-        '-f',
-        '--fdsnws',
-        help='FDSN webservice URL to use. If not specified, then \
---stationconfig must be specified to generate station metadata for Ispaq',
-        type=str,
-        default=None
-    )
+#     argsparser.add_argument(
+#         '-f',
+#         '--fdsnws',
+#         help='FDSN webservice URL to use. If not specified, then \
+# --stationconfig must be specified to generate station metadata for Ispaq',
+#         type=str,
+#         default=None
+#     )
     argsparser.add_argument(
         '-H',
         '--soh_archive',
@@ -249,7 +253,13 @@ Defaults to GNSS',
         automatically uploaded to s3 bucket',
         type=bool
     )
-
+    argsparser.add_argument(
+        '-u',
+        '--updateStationXml',
+        help='True, or False. If set to True, an updated station xml will be \
+fetched from the FDSN. Defaults to False',
+        type=bool
+    )
     args = argsparser.parse_args()
     default_parameters = get_default_parameters()
 
@@ -308,6 +318,7 @@ Defaults to GNSS',
         else default_parameters.S3_BUCKET_NAME
     timingSource = args.timingSource if args.timingSource is not None\
         else default_parameters.TIMING_SOURCE
+    updateStationXml = args.updateStationXml if args.updateStationXml is not None else False  # noqa
 
     # Optional parameters, with no default value
     uploadresultstos3 = args.uploadresultstos3
@@ -339,6 +350,7 @@ the enddate to the day after the startdate')
                      uploadresultstos3=uploadresultstos3,
                      bucketName=bucketName,
                      s3directory=s3directory,
-                     timingSource=timingSource
+                     timingSource=timingSource,
+                     updateStationXml=updateStationXml
                      #  stationconf=stationconf
                      )
