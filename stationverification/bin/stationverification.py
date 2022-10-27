@@ -52,7 +52,6 @@ main()
 import logging
 from multiprocessing import Process, Queue
 from datetime import timedelta
-from urllib.error import HTTPError
 from stationverification.utilities.cleanup_directory import cleanup_directory
 from stationverification.utilities.fetch_arguments import fetch_arguments
 from stationverification.utilities.generate_latency_results import \
@@ -79,16 +78,13 @@ def main():
         A json file containing the results of the stationvalidation tests.
 
     '''
-    # Fetching the updated station xml for QW network
-    try:
-        update_station_xml()
-    except HTTPError:
-        logging.error("Could not establish a connection to the FDSN")
-        pass
-
     # Setting up a queue for processors to push their results to if needed
     queue = Queue()
     user_inputs = fetch_arguments()
+
+    # Fetching the updated station xml for QW network
+    if user_inputs.updateStationXml:
+        update_station_xml()
 
     # Run Latency
     logging.info("Process 1: Generating Latency results..")
