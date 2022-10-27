@@ -43,6 +43,8 @@ default ispaq config file.
                         To which bucket to upload in S3
     -B S3PATHTOSAVETO, --s3bucketpathtosaveto S3PATHTOSAVETO
                         Which 'directory' in S3 to save to
+    -u --updateStationXml True, or False. If set to True, an updated station \
+xml will be fetched from the FDSN. Defaults to False
 Functions:
 ----------
 main()
