@@ -35,6 +35,10 @@ While logged into the EC2 instance as the ec2-user and is on the AWS validation 
       `U: Whether or not to upload results to S3 bucket, Example: True or False`
 
       `c: Station configuration file, if no stationXML is available, Example: /home/ec2-user/station-validation/tests/data`
+
+      `T: Timing source for Fortimus instruments. Either GNSS or PTP. Defaults to GNSS`
+
+      `u: Update station XML. True, or False. If set to True, an updated station xml will be fetched from the FDSN. Defaults to False`
 </details> 
 
 
@@ -87,7 +91,7 @@ While logged into the EC2 instance as the ec2-user and is on the AWS validation 
 
      t: Title of the wiki page
      w: The link to the webserver containing the results.
-     I: The type of instrument. Nanometrics or Fortimus
+     I: The type of instrument. Fortimus or Titansma
 
 # Reading Station Validation Results
 
