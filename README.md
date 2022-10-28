@@ -77,6 +77,14 @@ While logged into the EC2 instance as the ec2-user and is on the AWS validation 
 - The URL provided to the upload script should be in the following template:
    - `https://3.96.234.48:18010/json/QW/{station}/{date}/`
 
+- The current access token is valid.
+   - If the access token is not valid, please go to:
+   - Go to : http://gitlab.seismo.nrcan.gc.ca/eew/station-validation/-/settings/access_tokens 
+   - Follow the steps on the page above, and add an access token.
+   - Call the script, and include the token using -T parameter.
+   - Example: uploadreport -t "QW BCH14 2022-07-16 To 2022-07-26" -w "https://3.96.234.48:18010/json/QW/BCH14/2022-07-16-2022-07-26/" -I Fortimus -T "ACCESS_TOKEN"
+
+
 <b>Sample Call:</b>
 
     cd station-validation
