@@ -119,3 +119,7 @@ def generate_latency_results(typeofinstrument: str,
 
     except FileNotFoundError as e:
         logging.error(e)
+        if queue:
+            queue.put([
+                None,
+                None])

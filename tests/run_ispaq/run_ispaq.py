@@ -13,22 +13,22 @@ metrics = "eew_test"
 pdfinterval = "aggregated"
 
 # Station XML for QW
-# url = 'http://fdsn.seismo.nrcan.gc.ca/fdsnws/station/1/query?network=QW&level=response&nodata=404'  # noqa
-# request = requests.get(url, allow_redirects=True)
-# open('stationverification/data/new-QW.xml', 'wb').write(request.content)
-station_url = "/nrn/home/NRN/haissa/workspace/station-validation-project/station-validation/stationverification/data/QW-new.xml"
+url = 'http://fdsn.seismo.nrcan.gc.ca/fdsnws/station/1/query?network=QW&level=response&nodata=404'  # noqa
+request = requests.get(url, allow_redirects=True)
+open('stationverification/data/QW.xml', 'wb').write(request.content)
+station_url = "/nrn/home/NRN/haissa/workspace/station-validation-project/station-validation/stationverification/data/QW.xml"
 
 # Apollo
-# station = "QW.QCC02.*.H??"
-# startdate = date(2022, 8, 1)
-# enddate = date(2022, 8, 3)
-# miniseedarchive = "/nrn/home/NRN/haissa/workspace/station-validation-project/station-validation/backupData/apolloLocation/archive/miniseed"
+station = "QW.QCC02.*.H??"
+startdate = date(2022, 8, 1)
+enddate = date(2022, 8, 2)
+miniseedarchive = "/nrn/home/NRN/haissa/workspace/station-validation-project/station-validation/backupData/apolloLocation/archive/miniseed"
 
 # Guralp
-station = "QW.BCC04.00.H??"
-startdate = date(2022, 9, 22)
-enddate = date(2022, 10, 1)
-miniseedarchive = "/nrn/home/NRN/haissa/workspace/station-validation-project/station-validation/backupData/guralp/archive/miniseed"
+# station = "QW.BCC04.00.H??"
+# startdate = date(2022, 9, 22)
+# enddate = date(2022, 9, 23)
+# miniseedarchive = "/nrn/home/NRN/haissa/workspace/station-validation-project/station-validation/backupData/guralp/archive/miniseed"
 
 
 # Use IRIS's stationxml-seed-converter java porgram to convert stationxml

@@ -77,63 +77,66 @@ def populate_json_with_latency_info(
         timely_threshold: float,
         timely_percent: float,
 ):
-
-    channels = json_dict['channels'].keys()
-    logging.debug(f'List of channels in the json_dict: {channels}')
-    # Calculate average latency for the individual channels and\
-    #  timely_percentage and failed latencies
-    for channel in channels:
-        average = combined_latency_dataframe_for_all_days[
-            combined_latency_dataframe_for_all_days.channel
-            == channel].data_latency.mean()
-        logging.info(
-            f'Average latency for channel {channel} is \
-{round(float(average), 3)} seconds')  # :.3f
-        json_dict['channels'][channel]['latency'] = {}
-        json_dict['channels'][channel]['latency']['average_latency'] = \
-            round(float(average), 2)
-        below_threshold = percentbelowthreshold(
-            f'{station}.{channel}',
-            combined_latency_dataframe_for_all_days
-            [combined_latency_dataframe_for_all_days.channel ==
-             channel].data_latency,
-            timely_threshold)
-        json_dict['channels'][channel]['latency']['timely_availability'] = \
-            round(float(below_threshold), 2)
-        latencies_for_current_channel = \
-            combined_latency_dataframe_for_all_days[
-                combined_latency_dataframe_for_all_days.channel
-                == channel]
-        number_of_latencies_for_current_channel = \
-            latencies_for_current_channel.data_latency.size
-        number_of_failed_latencies_for_current_channel = \
-            latencies_for_current_channel[
-                latencies_for_current_channel["data_latency"] > 3]\
-            .data_latency.size
-        json_dict['channels'][channel]['latency']['total_latencies'] = \
-            number_of_latencies_for_current_channel
-        json_dict['channels'][channel]['latency']['failed_latencies'] = \
-            number_of_failed_latencies_for_current_channel
-
-    # JSON report calculations
-    average = \
-        combined_latency_dataframe_for_all_days.data_latency.mean()
-    logging.info(
-        f'Overall average latency for {network}-{station} is \
-{round(float(average), 2)} seconds')
-    json_dict['station_latency'] = {}
-    json_dict['station_latency']['average_latency'] = round(float(average), 2)
-    below_threshold = percentbelowthreshold(
-        station,
-        combined_latency_dataframe_for_all_days.data_latency,
-        timely_threshold)
-    json_dict['station_latency']['timely_availability'] = round(
-        float(below_threshold), 2)
-    if below_threshold >= timely_percent:
-        json_dict['station_latency']['timely_passed'] = True
+    if combined_latency_dataframe_for_all_days is None:
+        return json_dict
     else:
-        json_dict['station_latency']['timely_passed'] = False
-    return json_dict
+
+        channels = json_dict['channels'].keys()
+        logging.debug(f'List of channels in the json_dict: {channels}')
+        # Calculate average latency for the individual channels and\
+        #  timely_percentage and failed latencies
+        for channel in channels:
+            average = combined_latency_dataframe_for_all_days[
+                combined_latency_dataframe_for_all_days.channel
+                == channel].data_latency.mean()
+            logging.info(
+                f'Average latency for channel {channel} is \
+    {round(float(average), 3)} seconds')  # :.3f
+            json_dict['channels'][channel]['latency'] = {}
+            json_dict['channels'][channel]['latency']['average_latency'] = \
+                round(float(average), 2)
+            below_threshold = percentbelowthreshold(
+                f'{station}.{channel}',
+                combined_latency_dataframe_for_all_days
+                [combined_latency_dataframe_for_all_days.channel ==
+                 channel].data_latency,
+                timely_threshold)
+            json_dict['channels'][channel]['latency']['timely_availability'] = round(float(below_threshold), 2)  # noqa
+            latencies_for_current_channel = \
+                combined_latency_dataframe_for_all_days[
+                    combined_latency_dataframe_for_all_days.channel
+                    == channel]
+            number_of_latencies_for_current_channel = \
+                latencies_for_current_channel.data_latency.size
+            number_of_failed_latencies_for_current_channel = \
+                latencies_for_current_channel[
+                    latencies_for_current_channel["data_latency"] > 3]\
+                .data_latency.size
+            json_dict['channels'][channel]['latency']['total_latencies'] = \
+                number_of_latencies_for_current_channel
+            json_dict['channels'][channel]['latency']['failed_latencies'] = \
+                number_of_failed_latencies_for_current_channel
+
+        # JSON report calculations
+        average = \
+            combined_latency_dataframe_for_all_days.data_latency.mean()
+        logging.info(
+            f'Overall average latency for {network}-{station} is \
+    {round(float(average), 2)} seconds')
+        json_dict['station_latency'] = {}
+        json_dict['station_latency']['average_latency'] = round(
+            float(average), 2)
+        below_threshold = percentbelowthreshold(
+            station,
+            combined_latency_dataframe_for_all_days.data_latency,
+            timely_threshold)
+        json_dict['station_latency']['timely_availability'] = round(
+            float(below_threshold), 2)
+        if below_threshold >= timely_percent:
+            json_dict['station_latency']['timely_passed'] = True
+        else:
+            json_dict['station_latency']['timely_passed'] = False
+        return json_dict
 
 
 def percentbelowthreshold(

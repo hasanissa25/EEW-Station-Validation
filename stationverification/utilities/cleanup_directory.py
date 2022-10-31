@@ -2,6 +2,7 @@ import subprocess
 import os
 
 from datetime import date, timedelta
+from typing import Optional
 
 from stationverification.utilities.change_name_of_ISPAQ_files \
     import change_name_of_ISPAQ_files
@@ -13,6 +14,7 @@ def cleanup_directory(
     startdate: date,
     enddate: date,
     outputdir: str,
+    instrumentGain: Optional[str] = None
 ):
     '''
     Function to clean up after the program runs.
@@ -48,7 +50,8 @@ def cleanup_directory(
             f"mkdir -p '{validation_output_directory}'")
 
     change_name_of_ISPAQ_files(network=network,
-                               station=station)
+                               station=station,
+                               instrumentGain=instrumentGain)
     pdffiles = f'ispaq_outputs/PDFs/{network}/{station}/*.png'
     psdfiles = f'ispaq_outputs/PSDs/{network}/{station}/*.csv'
     subprocess.getoutput(

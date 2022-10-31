@@ -197,7 +197,8 @@ def main():
         station=user_inputs.station,
         startdate=user_inputs.startdate,
         enddate=user_inputs.enddate,
-        outputdir=user_inputs.outputdir)
+        outputdir=user_inputs.outputdir,
+        instrumentGain=user_inputs.instrument_gain)
 
     if user_inputs.uploadresultstos3 is True:
         if user_inputs.startdate == user_inputs.enddate - timedelta(days=1):

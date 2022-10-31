@@ -100,6 +100,10 @@ class UserInput(dict):
     def updateStationXml(self) -> bool:
         return self["updateStationXml"]
 
+    @property
+    def instrument_gain(self) -> str:
+        return self["instrument_gain"]
+
 
 def fetch_arguments() -> UserInput:
     # Create argparse object to handle user arguments
@@ -261,6 +265,14 @@ fetched from the FDSN. Defaults to False',
         type=bool,
         default=False
     )
+
+    argsparser.add_argument(
+        '-g',
+        '--gain',
+        help='Instrument gain',
+        type=str,
+    )
+
     args = argsparser.parse_args()
     default_parameters = get_default_parameters()
 
@@ -269,6 +281,7 @@ fetched from the FDSN. Defaults to False',
     network = args.network
     startdate = (dateparser.parse(args.startdate, yearfirst=True)).date()
     enddate = (dateparser.parse(args.enddate, yearfirst=True)).date()
+
     # Only one of them is required, either station_url or stationconf
     station_url = args.station_url if args.station_url is not None\
         else default_parameters.STATION_URL
@@ -325,6 +338,7 @@ fetched from the FDSN. Defaults to False',
     uploadresultstos3 = args.uploadresultstos3
     location = args.location
     # fdsnws = args.fdsnws
+    instrument_gain = args.gain
 
     if startdate > enddate:
         raise exceptions.TimeSeriesError('Enddate must be after startdate.')
@@ -352,6 +366,7 @@ the enddate to the day after the startdate')
                      bucketName=bucketName,
                      s3directory=s3directory,
                      timingSource=timingSource,
-                     updateStationXml=updateStationXml
+                     updateStationXml=updateStationXml,
                      #  stationconf=stationconf
+                     instrument_gain=instrument_gain
                      )
