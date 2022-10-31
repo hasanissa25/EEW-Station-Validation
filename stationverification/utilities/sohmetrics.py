@@ -72,7 +72,7 @@ def getsohfiles(
         List of files found for the specified station, SOH channel and time
         period
     '''
-    print(f'SohMetrics>getsohfiles>Channel> {channel}')
+
     files: List[str] = []
     iterdate = startdate
     if location is None:

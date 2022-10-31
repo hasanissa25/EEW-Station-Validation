@@ -43,6 +43,9 @@ default ispaq config file.
                         To which bucket to upload in S3
     -B S3PATHTOSAVETO, --s3bucketpathtosaveto S3PATHTOSAVETO
                         Which 'directory' in S3 to save to
+    -u --updateStationXml True, or False. If set to True, an updated station \
+xml will be fetched from the FDSN. Defaults to False
+
 Functions:
 ----------
 main()
@@ -78,16 +81,13 @@ def main():
         A json file containing the results of the stationvalidation tests.
 
     '''
-    # Fetching the updated station xml for QW network
-    try:
-        update_station_xml()
-    except Exception as err:
-        logging.error("Could not establish a connection to the FDSN")
-        raise err
-
     # Setting up a queue for processors to push their results to if needed
     queue = Queue()
     user_inputs = fetch_arguments()
+
+    # Fetching the updated station xml for QW network
+    if user_inputs.updateStationXml:
+        update_station_xml()
 
     # Run Latency
     logging.info("Process 1: Generating Latency results..")
