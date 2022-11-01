@@ -1,60 +1,11 @@
 '''
 Python script used to check the quality of data coming from new EEW Stations
 in order to validate that the stations are suitable for production.
-
-usage: stationverification [-h] -N NETWORK -S STATION -d STARTDATE -e ENDDATE
-                           -s STATIONURL -m MINISEEDARCHIVE -l LATENCYARCHIVE
-                           -H SOHARCHIVE -i ISPAQLOCATION -T TYPEOFINSTRUMENT
-
-optional arguments:
-    -h, --help            show this help message and exit
-    -N NETWORK, --network NETWORK
-                        The networks unique code. Ex. QW
-    -S STATION, --station STATION
-                        The station's unique code. Ex. QCQ
-    -d STARTDATE, --startdate STARTDATE
-                        The first date of the verification period. Must be in
-                        YYYY-M-D format
-    -e ENDDATE, --enddate ENDDATE
-                        The end of the verification period. Data will be
-                        tested for each day from the start date up to but not
-                        including the end date. Must be in YYYY-MM-DD format.
-    -i ISPAQLOCATION, --ispaqlocation ISPAQLOCATION
-                        If ispaq is not installed as a package, specify the
-                        location of run_ispaq.py
-    -l LatencyDirectory, --latency LatencyDirectory
-                        The directory containing latency files
-    -H SOHDirectory, --soh_archive SOHDirectory
-                        The directory containing SOH files
-    -m miniseedDirectory, --miniseedarchive miniseedDirectory
-                        The directory containing miniseed files
-    -s station_url, --station_url station_url
-                        FDSN webservice or path to stationXML
-    -P PREFERENCEFILE --preference_file PREFERENCEFILE
-                        The path to the ISPAQ preference file. Overrides the \
-default ispaq config file.
-    -p PDFINTERVAL, --pdfinterval PDFINTERVAL
-                        time span for PDFs - daily and/or aggregated over the \
-                            entire span
-    -U UPLOADTOS3, --uploadresultstos3 UPLOADTOS3
-                        Whether or not to upload results to the S3 bucket.\
-                            True or False
-    -b NAMEOFS3BUCKET, --s3bucketname NAMEOFS3BUCKET
-                        To which bucket to upload in S3
-    -B S3PATHTOSAVETO, --s3bucketpathtosaveto S3PATHTOSAVETO
-                        Which 'directory' in S3 to save to
-    -u --updateStationXml True, or False. If set to True, an updated station \
-xml will be fetched from the FDSN. Defaults to False
-
-Functions:
-----------
-main()
-    The main fuction, which takes care of calling the other functions and
-    running ISPAQ
 '''
 import logging
 from multiprocessing import Process, Queue
 from datetime import timedelta
+from typing import Any
 from stationverification.utilities.cleanup_directory import cleanup_directory
 from stationverification.utilities.fetch_arguments import fetch_arguments
 from stationverification.utilities.generate_latency_results import \
@@ -69,6 +20,7 @@ from stationverification.utilities.upload_results_to_s3 import \
 from stationverification.utilities.timely_availability_plot import \
     timely_availability_plot
 from stationverification.utilities.update_station_xml import update_station_xml
+from stationverification.utilities.fetch_arguments import UserInput
 
 
 def main():
@@ -81,13 +33,20 @@ def main():
         A json file containing the results of the stationvalidation tests.
 
     '''
-    # Setting up a queue for processors to push their results to if needed
-    queue = Queue()
     user_inputs = fetch_arguments()
 
-    # Fetching the updated station xml for QW network
     if user_inputs.updateStationXml:
+        # Fetching the updated station xml for QW network
         update_station_xml()
+    if user_inputs.psdOnly is True:
+        psd_plots_only(user_inputs=user_inputs)
+    else:
+        latency_and_ispq_metrics(user_inputs=user_inputs)
+
+
+def latency_and_ispq_metrics(user_inputs: UserInput):
+    # Setting up a queue for processors to push their results to if needed
+    queue: Any = Queue()  # noqa
 
     # Run Latency
     logging.info("Process 1: Generating Latency results..")
@@ -211,3 +170,29 @@ def main():
         upload_results_to_s3(path_of_folder_to_upload=validation_output_directory,  # noqa
                              bucketName=user_inputs.bucketName,
                              s3directory=user_inputs.s3directory)
+
+
+def psd_plots_only(user_inputs: UserInput):
+    logging.info("Generating ISPAQ results")
+    handle_running_ispaq_command(
+        ispaqloc=user_inputs.ispaqloc,
+        metrics="eew_only_psd",
+        startdate=user_inputs.startdate,
+        enddate=user_inputs.enddate,
+        pfile=user_inputs.pfile,
+        pdfinterval=user_inputs.pdfinterval,
+        miniseedarchive=user_inputs.miniseedarchive,
+        network=user_inputs.network,
+        station=user_inputs.station,
+        location=user_inputs.location,
+        station_url=user_inputs.station_url
+    )
+
+    logging.info("Cleaning up directory..")
+    cleanup_directory(
+        network=user_inputs.network,
+        station=user_inputs.station,
+        startdate=user_inputs.startdate,
+        enddate=user_inputs.enddate,
+        outputdir=user_inputs.outputdir,
+        instrumentGain=user_inputs.instrument_gain)

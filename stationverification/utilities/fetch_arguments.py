@@ -1,5 +1,6 @@
 import argparse
 from configparser import ConfigParser
+from sqlite3 import Date
 
 from dateutil import parser as dateparser  # type: ignore
 
@@ -13,7 +14,7 @@ from stationverification.utilities.fetch_type_of_instrument_from_stationxml \
 
 class UserInput(dict):
     @property
-    def station(self) -> bool:
+    def station(self) -> str:
         return self["station"]
 
     @property
@@ -25,11 +26,11 @@ class UserInput(dict):
         return self["location"]
 
     @property
-    def startdate(self) -> str:
+    def startdate(self) -> Date:
         return self["startdate"]
 
     @property
-    def enddate(self) -> str:
+    def enddate(self) -> Date:
         return self["enddate"]
 
     @property
@@ -45,7 +46,7 @@ class UserInput(dict):
         return self["pfile"]
 
     @property
-    def thresholds(self) -> str:
+    def thresholds(self) -> ConfigParser:
         return self["thresholds"]
 
     @property
@@ -103,6 +104,10 @@ class UserInput(dict):
     @property
     def instrument_gain(self) -> str:
         return self["instrument_gain"]
+
+    @property
+    def psdOnly(self) -> str:
+        return self["psdOnly"]
 
 
 def fetch_arguments() -> UserInput:
@@ -273,6 +278,14 @@ fetched from the FDSN. Defaults to False',
         type=str,
     )
 
+    argsparser.add_argument(
+        '-G',
+        '--psdOnly',
+        help='Only run the PSD plot generation',
+        type=bool,
+        default=False
+
+    )
     args = argsparser.parse_args()
     default_parameters = get_default_parameters()
 
@@ -339,7 +352,7 @@ fetched from the FDSN. Defaults to False',
     location = args.location
     # fdsnws = args.fdsnws
     instrument_gain = args.gain
-
+    psdOnly = args.psdOnly
     if startdate > enddate:
         raise exceptions.TimeSeriesError('Enddate must be after startdate.')
     elif startdate == enddate:
@@ -368,5 +381,6 @@ the enddate to the day after the startdate')
                      timingSource=timingSource,
                      updateStationXml=updateStationXml,
                      #  stationconf=stationconf
-                     instrument_gain=instrument_gain
+                     instrument_gain=instrument_gain,
+                     psdOnly=psdOnly
                      )

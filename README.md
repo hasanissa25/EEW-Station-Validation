@@ -35,6 +35,13 @@ While logged into the EC2 instance as the ec2-user and is on the AWS validation 
       `U: Whether or not to upload results to S3 bucket, Example: True or False`
 
       `c: Station configuration file, if no stationXML is available, Example: /home/ec2-user/station-validation/tests/data`
+      
+      `u: Update Station Xml, True, or False. If set to True, an updated station xml will be fetched from the FDSN. Defaults to False`
+     
+      `g: Instrument gain, which will reflect in the file name of the generated PDFs, Example: 4g or 5g or 0.5g`
+
+      `G: Only generate PSDs, If True only the PSD plots will be generated. Defaults to False`
+
 </details> 
 
 
