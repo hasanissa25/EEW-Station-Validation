@@ -57,6 +57,10 @@ While logged into the EC2 instance as the ec2-user and is on the AWS validation 
     
     `time nohup stationverificationlatency -N QW -S BCL01 -d 2022-6-25 -e 2022-7-5  >> logs/BCL01-Latency_log &`
 
+    <b>PSDs only script:</b>
+    
+    `time nohup stationverification -N QW -S BCL01 -d 2022-6-25 -e 2022-7-5  -G True >> logs/BCL01-Latency_log &`
+
     <b>Station Verification script with Station XML, and over-writing default archive directories:</b>
     
     `time nohup stationverification -N QW -S QCC01 -L 00 -d 2022-4-21 -e 2022-5-1 -m /apollo/archive/miniseed/ -l /apollo/archive/latency -i /home/ec2-user/ispaq/run_ispaq.py -H /apollo/archive/soh/ -s /home/ec2-user/station-validation/stationverification/data/QW.xml -o /validation >> logs/QCC01_log.out &`
