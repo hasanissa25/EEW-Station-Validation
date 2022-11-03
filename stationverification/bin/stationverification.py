@@ -1,6 +1,16 @@
 '''
 Python script used to check the quality of data coming from new EEW Stations
 in order to validate that the stations are suitable for production.
+
+usage: stationverification [-h] -N NETWORK -S STATION -d STARTDATE -e ENDDATE
+                           -s STATIONURL -m MINISEEDARCHIVE -l LATENCYARCHIVE
+                           -H SOHARCHIVE -i ISPAQLOCATION -T TYPEOFINSTRUMENT
+
+Functions:
+----------
+main()
+    The main fuction, which takes care of calling the other functions and
+    running ISPAQ
 '''
 import logging
 from multiprocessing import Process, Queue
