@@ -67,8 +67,7 @@ def timely_availability_plot(
         else:
             snlc = f'{network}.{station}.{location}.'
         if startdate == enddate - timedelta(days=1):
-            filename = f'{snlc}.{startdate}\
-    .timely_availability_plot.png'
+            filename = f'{snlc}.{startdate}.timely_availability_plot.png'
         else:
             filename = f'{snlc}.{startdate}_\
     {enddate - timedelta(days=1)}.timely_availability_plot.png'
