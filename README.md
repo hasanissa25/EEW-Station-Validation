@@ -74,10 +74,14 @@ While logged into the EC2 instance as the ec2-user and is on the AWS validation 
     `time nohup stationverificationlatency -N QW -S BCL25 -d 2022-4-21 -e 2022-4-22 -l /apollo/archive/latency -o /validation >> logs/BCL25_log.out &</details>`
 
 
+    <b>Updating Station XML - Calling script from outside AWS</b>
+    
+    `fetchStationXml -n QW`
 
+    <b>Updating Station XML - Inside of AWS</b>
 
-
-
+    `include -u True as a parameter to the script call`
+     
 <h1>Uploading Results to GitLab (NRCan network, not on AWS)</h1>
 
 <b>Assumptions</b>:
