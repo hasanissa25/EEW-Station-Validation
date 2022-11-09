@@ -106,7 +106,7 @@ class UserInput(dict):
         return self["instrument_gain"]
 
     @property
-    def psdOnly(self) -> str:
+    def psdOnly(self) -> bool:
         return self["psdOnly"]
 
 
