@@ -91,3 +91,8 @@ def cleanup_directory_after_latency_call(startdate: date,
         f"mv ./stationvalidation_output/* {validation_output_directory}")  # noqa
     subprocess.getoutput(
         "rm -rf ./stationvalidation_output")
+
+
+def initialize_directory():
+    subprocess.getoutput(
+        "rm -rf stationvalidation_output")

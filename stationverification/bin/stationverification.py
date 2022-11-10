@@ -16,7 +16,8 @@ import logging
 from multiprocessing import Process, Queue
 from datetime import timedelta
 from typing import Any
-from stationverification.utilities.cleanup_directory import cleanup_directory
+from stationverification.utilities.cleanup_directory import cleanup_directory,\
+    initialize_directory
 from stationverification.utilities.fetch_arguments import fetch_arguments
 from stationverification.utilities.generate_latency_results import \
     generate_latency_results
@@ -45,6 +46,7 @@ def main():
     '''
     user_inputs = fetch_arguments()
 
+    initialize_directory()
     if user_inputs.updateStationXml:
         # Fetching the updated station xml for QW network
         update_station_xml()

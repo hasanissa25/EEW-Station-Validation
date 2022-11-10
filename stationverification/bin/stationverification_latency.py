@@ -38,7 +38,7 @@ import logging
 
 from datetime import timedelta
 from stationverification.utilities.cleanup_directory \
-    import cleanup_directory_after_latency_call
+    import cleanup_directory_after_latency_call, initialize_directory
 
 from stationverification.utilities.fetch_arguments import fetch_arguments
 from stationverification.utilities.generate_latency_results \
@@ -63,7 +63,7 @@ def main():
     '''
 
     # Fetching the updated station xml for QW network
-
+    initialize_directory()
     update_station_xml()
     user_inputs = fetch_arguments()
 
