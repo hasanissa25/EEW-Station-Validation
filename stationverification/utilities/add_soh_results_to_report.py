@@ -221,15 +221,16 @@ def handle_fortimus_soh_results(
                                                    startdate=startdate,
                                                    enddate=enddate,
                                                    soh_directory=soh_directory)
-    fortimus_soh_metrics_list \
-        = handle_fortimus_soh_files(fortimus_soh_files=fortimus_soh_files,
-                                    station=station,
-                                    location=location)
-
-    json_dict = fortimus_sohmetrics.add_fortimus_soh_metric_results_to_json(
-        soh_data=fortimus_soh_metrics_list,
-        json_dict=json_dict,
-        thresholds=thresholds)
+    if fortimus_soh_files is not None:
+        fortimus_soh_metrics_list \
+            = handle_fortimus_soh_files(fortimus_soh_files=fortimus_soh_files,
+                                        station=station,
+                                        location=location)
+        json_dict = \
+            fortimus_sohmetrics.add_fortimus_soh_metric_results_to_json(
+                soh_data=fortimus_soh_metrics_list,
+                json_dict=json_dict,
+                thresholds=thresholds)
 
     json_dict = fortimus_sohmetrics.handle_fortimus_soh_miniseed_metrics(
         network=network,
