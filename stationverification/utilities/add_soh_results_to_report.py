@@ -221,7 +221,7 @@ def handle_fortimus_soh_results(
                                                    startdate=startdate,
                                                    enddate=enddate,
                                                    soh_directory=soh_directory)
-    if fortimus_soh_files is not None:
+    if fortimus_soh_files is not None and location is not None:
         fortimus_soh_metrics_list \
             = handle_fortimus_soh_files(fortimus_soh_files=fortimus_soh_files,
                                         station=station,
@@ -231,7 +231,9 @@ def handle_fortimus_soh_results(
                 soh_data=fortimus_soh_metrics_list,
                 json_dict=json_dict,
                 thresholds=thresholds)
-
+    else:
+        logging.warning(
+            'Location code is not provided. Skipping Fortimus SOH file check.')
     json_dict = fortimus_sohmetrics.handle_fortimus_soh_miniseed_metrics(
         network=network,
         station=station,
