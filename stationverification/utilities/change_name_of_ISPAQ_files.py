@@ -31,7 +31,7 @@ def proccess_PDF_directory(network: str,
     for file in files:
         path_to_file = Path(file)
         new_file_name = file.replace(
-            ".D.", ".").replace("_PDF", '.pdf' if instrumentGain is None else f'.{instrumentGain}.pdf')
+            ".D.", ".").replace("_PDF", '.psd' if instrumentGain is None else f'.{instrumentGain}.psd')
         if path_to_file.exists():
             subprocess.getoutput(
                 f"mv {file} {new_file_name}")
@@ -45,7 +45,7 @@ def proccess_PDF_directory(network: str,
     for file in files:
         path_to_file = Path(file)
         new_file_name = file.replace(
-            ".D.", ".").replace("_PDF", ".pdf")
+            ".D.", ".").replace("_PDF", ".psd")
         if path_to_file.exists():
             subprocess.getoutput(
                 f"mv {file} {new_file_name}")
