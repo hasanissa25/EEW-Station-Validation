@@ -58,7 +58,7 @@ def get_latency_files(
 {datetime_to_year_and_julian_day(iterdate, typeofinstrument)}.json 2>/dev/null'
         elif typeofinstrument.lower() == "fortimus":
             cmd = f'ls {path}/{iterdate.strftime("%Y/%m/%d")}/{network}_\
-{station}_*_*_\
+{station}_*_H??_\
 {datetime_to_year_and_julian_day(iterdate, typeofinstrument)}.csv \
 2>/dev/null'
 
