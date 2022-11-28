@@ -54,3 +54,5 @@ Run fetch_station_xml script (Within CHIS Network):
 -s: The start date of the station. If left empty, all starting dates will be queried 
     
     fetchStationXml -n QW
+
+Test
