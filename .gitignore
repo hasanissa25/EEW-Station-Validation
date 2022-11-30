@@ -52,7 +52,7 @@ hasan/*
 distribution/*
 
 tests/data/*
-backupData/* 
+testData/* 
 # !tests/data/ispaq_outputs
 # tests/data/apollo/* 
 # !tests/data/apollo/archive
